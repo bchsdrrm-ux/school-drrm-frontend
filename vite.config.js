@@ -35,6 +35,7 @@ export default defineConfig({
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/^\/api\//, /^\/uploads\//],
         cleanupOutdatedCaches: true,
+        importScripts: ['push-handler.js'],
         runtimeCaching: [
           {
             // The public /info page's live data: try the network, but if it is

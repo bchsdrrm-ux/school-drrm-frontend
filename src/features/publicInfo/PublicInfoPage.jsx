@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { api } from '../../lib/apiClient';
 import Logo from '../../components/Logo';
 import Icon from '../../components/icons';
+import AlertsCard from '../../components/AlertsCard';
 import { useInstallPrompt } from '../../lib/install';
 import { GUIDES, NATIONAL_HOTLINES, PARENT_GUIDE } from './guides';
 
@@ -232,6 +233,8 @@ export default function PublicInfoPage() {
         </div>
 
         <StatusBanner {...live} />
+
+        <AlertsCard />
 
         <div className="grid gap-4 md:grid-cols-2">
           <Card title="Emergency numbers" icon="phone">

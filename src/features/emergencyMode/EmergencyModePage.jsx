@@ -46,7 +46,7 @@ export default function EmergencyModePage() {
   const [teams, setTeams] = useState([]);
   const [openIncidents, setOpenIncidents] = useState([]);
 
-  const [activateForm, setActivateForm] = useState({ alertType: 'Earthquake', notes: '', incidentId: '' });
+  const [activateForm, setActivateForm] = useState({ alertType: 'Earthquake', notes: '', incidentId: '', notifySubscribers: true });
   const [activating, setActivating] = useState(false);
 
   const [headcountForm, setHeadcountForm] = useState({ totalPersons: '', evacuated: '', accountedFor: '', missing: '', injured: '' });
@@ -89,11 +89,15 @@ export default function EmergencyModePage() {
     setActivating(true);
     setError('');
     try {
-      await api.post('/emergency-mode/activate', {
+      const result = await api.post('/emergency-mode/activate', {
         alertType: activateForm.alertType,
         notes: activateForm.notes || undefined,
         incidentId: activateForm.incidentId || undefined,
+        notifySubscribers: activateForm.notifySubscribers,
       });
+      if (result?.alertsQueued > 0) {
+        toast.success(`Phone alerts are being sent to ${result.alertsQueued} device${result.alertsQueued === 1 ? '' : 's'}.`);
+      }
       await refreshDetail();
     } catch (err) {
       setError(err.message);
@@ -200,6 +204,19 @@ export default function EmergencyModePage() {
               className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
               placeholder="Anything responders should know immediately"
             />
+          </label>
+
+          <label className="flex items-start gap-2 rounded-lg bg-slate-50 px-3 py-2.5 text-sm text-slate-700">
+            <input
+              type="checkbox"
+              className="mt-0.5"
+              checked={activateForm.notifySubscribers}
+              onChange={(e) => setActivateForm((f) => ({ ...f, notifySubscribers: e.target.checked }))}
+            />
+            <span>
+              Send phone alerts to everyone who subscribed
+              <span className="block text-xs text-slate-500">Untick for a drill or test, so parents' and staff phones are not alerted. The "all clear" is only sent if this alert was.</span>
+            </span>
           </label>
 
           {error && <div className="text-sm text-risk-critical">{error}</div>}

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../auth/AuthContext';
 import ChangePasswordModal from '../auth/ChangePasswordModal';
 import { useInstallPrompt } from '../lib/install';
+import { usePushAlerts } from '../lib/push';
 
 export default function UserMenu() {
   const { user, logout } = useAuth();
@@ -9,6 +10,7 @@ export default function UserMenu() {
   const [showPassword, setShowPassword] = useState(false);
   const ref = useRef(null);
   const { canInstall, install } = useInstallPrompt();
+  const alerts = usePushAlerts();
 
   useEffect(() => {
     if (!open) return undefined;
@@ -57,6 +59,15 @@ export default function UserMenu() {
           >
             Change password
           </button>
+          {(alerts.status === 'available' || alerts.status === 'subscribed') && (
+            <button
+              role="menuitem"
+              onClick={() => { setOpen(false); (alerts.status === 'subscribed' ? alerts.disable : alerts.enable)(); }}
+              className="block w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50"
+            >
+              {alerts.status === 'subscribed' ? 'Turn off emergency alerts' : 'Turn on emergency alerts'}
+            </button>
+          )}
           {canInstall && (
             <button
               role="menuitem"
