@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import Logo from '../components/Logo';
 
@@ -131,6 +131,9 @@ export default function LoginPage() {
 
           <p className="mt-4 text-center text-xs text-slate-500">
             Forgot your password? Ask your school's system administrator to reset it.
+          </p>
+          <p className="mt-3 text-center text-sm">
+            <Link to="/info" className="font-medium text-brand-700 hover:underline">Emergency information for everyone</Link>
           </p>
         </div>
       </main>

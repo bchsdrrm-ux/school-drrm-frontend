@@ -6,13 +6,16 @@ import Table from '../../components/Table';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 import FormField from '../../components/FormField';
+import PublicToggle from '../../components/PublicToggle';
+import { useFeedback } from '../../components/Toast';
 
-const EMPTY_AREA_FORM = { name: '', locationId: '', capacity: '', accessibility: '', status: 'active' };
+const EMPTY_AREA_FORM = { name: '', locationId: '', capacity: '', accessibility: '', status: 'active', isPublic: false };
 const EMPTY_ROUTE_FORM = { destinationAreaId: '', isPrimary: true, obstacles: '' };
 const EMPTY_CLASSROOM_FORM = { locationId: '', learnerCount: '', teacherId: '', primaryRouteId: '', altRouteId: '', assemblyAreaId: '' };
 
 export default function EvacuationPage() {
   const { user } = useAuth();
+  const { toast } = useFeedback();
   const { locations } = useLocations();
   const [tab, setTab] = useState('areas'); // 'areas' | 'routes' | 'classrooms'
 
@@ -136,11 +139,22 @@ export default function EvacuationPage() {
     }
   };
 
+  const toggleAreaPublic = async (area, isPublic) => {
+    try {
+      await api.put(`/evacuation/areas/${area.id}`, { isPublic });
+      toast.success(isPublic ? `${area.name} is now shown on the public page.` : `${area.name} is now staff only.`);
+      loadAreas();
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
   const areaColumns = [
     { key: 'name', header: 'Area Name' },
     { key: 'location', header: 'Location', render: formatLocation },
     { key: 'capacity', header: 'Capacity' },
     { key: 'status', header: 'Status' },
+    { key: 'is_public', header: 'Public page', render: (r) => <PublicToggle value={r.is_public} canManage={canManage} onChange={(v) => toggleAreaPublic(r, v)} label={`Show ${r.name} on the public page`} /> },
   ];
 
   const routeColumns = [
@@ -247,6 +261,10 @@ export default function EvacuationPage() {
             </FormField>
             <FormField type="number" min="1" label="Capacity" required value={areaForm.capacity} onChange={handleAreaChange('capacity')} />
             <FormField label="Accessibility Notes" value={areaForm.accessibility} onChange={handleAreaChange('accessibility')} placeholder="e.g. PWD-accessible ramp" />
+            <label className="flex items-start gap-2 text-sm text-slate-700">
+              <input type="checkbox" className="mt-0.5" checked={areaForm.isPublic} onChange={(e) => setAreaForm((f) => ({ ...f, isPublic: e.target.checked }))} />
+              <span>Show on the public information page<span className="block text-xs text-slate-500">Anyone with the link can see the area's name, location, capacity and accessibility notes.</span></span>
+            </label>
             {error && <div className="text-sm text-risk-critical">{error}</div>}
             <div className="flex justify-end gap-2 pt-2">
               <Button type="button" variant="secondary" onClick={() => setShowAreaForm(false)}>Cancel</Button>

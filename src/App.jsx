@@ -4,6 +4,7 @@ import RequireAuth from './auth/RequireAuth';
 import LoginPage from './auth/LoginPage';
 import AppShell from './layouts/AppShell';
 import PlaceholderPage from './components/PlaceholderPage';
+import PublicInfoPage from './features/publicInfo/PublicInfoPage';
 
 import DashboardPage from './features/dashboard/DashboardPage';
 import HazardsPage from './features/hazards/HazardsPage';
@@ -29,6 +30,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/info" element={<PublicInfoPage />} />
 
       <Route
         element={
