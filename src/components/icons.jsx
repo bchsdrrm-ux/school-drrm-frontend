@@ -20,6 +20,10 @@ const PATHS = {
   documents: <path d="M4 6a1 1 0 011-1h4l2 2h8a1 1 0 011 1v10a1 1 0 01-1 1H5a1 1 0 01-1-1V6z" />,
   reports: <path d="M4 20V4M4 20h16M8 16v-4M12 16V8M16 16v-6" />,
   settings: <path d="M4 7h9M17 7h3M4 12h3M11 12h9M4 17h11M19 17h1M15 5v4M9 10v4M17 15v4" />,
+  check: <path d="M5 12.5l4.5 4.5L19 7.5" />,
+  plus: <path d="M12 5v14M5 12h14" />,
+  arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
+  siren: <path d="M12 3v2M4.5 6.5L6 8M19.5 6.5L18 8M7 19v-5a5 5 0 0110 0v5M5 19h14M10 12a2 2 0 012-2" />,
 };
 
 export default function Icon({ name, className = 'h-5 w-5' }) {

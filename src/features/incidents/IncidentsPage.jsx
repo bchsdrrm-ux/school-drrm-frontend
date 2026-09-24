@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { api } from '../../lib/apiClient';
 import { useAuth, ROLE_GROUPS, hasRole } from '../../auth/AuthContext';
 import Table from '../../components/Table';
@@ -39,7 +40,8 @@ export default function IncidentsPage() {
 
   const [incidents, setIncidents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
+  const [searchParams] = useSearchParams();
+  const [showForm, setShowForm] = useState(searchParams.get('new') === '1'); // dashboard quick action
   const [form, setForm] = useState(EMPTY_FORM);
   const [error, setError] = useState('');
 

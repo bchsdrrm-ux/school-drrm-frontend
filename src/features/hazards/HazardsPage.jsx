@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { api } from '../../lib/apiClient';
 import { useAuth, ROLE_GROUPS, hasRole } from '../../auth/AuthContext';
 import { useLocations, locationLabel, formatLocation } from '../../lib/useLocations';
@@ -34,7 +35,8 @@ export default function HazardsPage() {
   const [error, setError] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
-  const [showForm, setShowForm] = useState(false);
+  const [searchParams] = useSearchParams();
+  const [showForm, setShowForm] = useState(searchParams.get('new') === '1'); // dashboard quick action
   const [form, setForm] = useState(EMPTY_FORM);
   const [submitting, setSubmitting] = useState(false);
   const [evidenceHazardId, setEvidenceHazardId] = useState(null); // hazard currently open in the Evidence modal
