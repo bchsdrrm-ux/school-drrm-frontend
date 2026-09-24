@@ -4,6 +4,7 @@ import { api } from '../../lib/apiClient';
 import Logo from '../../components/Logo';
 import Icon from '../../components/icons';
 import AlertsCard from '../../components/AlertsCard';
+import AssemblyAreas from './AssemblyAreas';
 import { useInstallPrompt } from '../../lib/install';
 import { GUIDES, NATIONAL_HOTLINES, PARENT_GUIDE } from './guides';
 
@@ -279,28 +280,7 @@ export default function PublicInfoPage() {
           </Card>
 
           <Card title="Assembly areas" icon="exit">
-            <p className="mb-3 text-sm text-slate-600">After evacuating, go to the assembly area for your class and wait for the headcount.</p>
-            {status === 'loading' && <Skeleton />}
-            {status === 'error' && <p className="text-sm text-slate-500">Could not load assembly areas.</p>}
-            {status === 'ready' && areas.length === 0 && (
-              <p className="text-sm text-slate-500">The school has not published its assembly areas yet. Ask your teacher where your class assembles.</p>
-            )}
-            {areas.length > 0 && (
-              <ul className="space-y-3">
-                {areas.map((a) => {
-                  const where = [a.building, a.floor, a.room_area].filter(Boolean).join(', ');
-                  return (
-                    <li key={a.name} className="rounded-lg bg-slate-50 px-3 py-2.5">
-                      <div className="text-sm font-medium text-slate-800">{a.name}</div>
-                      <div className="text-xs text-slate-500">
-                        {where && <span>{where} · </span>}Holds about {Number(a.capacity).toLocaleString()} people
-                      </div>
-                      {a.accessibility && <div className="mt-0.5 text-xs text-slate-600">Accessibility: {a.accessibility}</div>}
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
+            <AssemblyAreas status={status} areas={areas} online={live.online} />
           </Card>
         </div>
 
