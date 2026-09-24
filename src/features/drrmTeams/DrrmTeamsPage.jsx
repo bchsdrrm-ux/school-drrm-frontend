@@ -114,7 +114,7 @@ export default function DrrmTeamsPage() {
       {isLoading ? (
         <div className="text-sm text-slate-500">Loading…</div>
       ) : !teams.length ? (
-        <div className="text-sm text-slate-500 bg-white border border-slate-200 rounded-lg p-8 text-center">
+        <div className="text-sm text-slate-500 bg-surface border border-slate-200 rounded-lg p-8 text-center">
           No teams set up yet. {canManage ? 'Click "Add Team" to create the first one (e.g. Incident Commander, Evacuation Team).' : 'Ask a DRRM Coordinator to set these up.'}
         </div>
       ) : (
@@ -136,7 +136,7 @@ export default function DrrmTeamsPage() {
 
           <div className="lg:col-span-3">
             {selectedTeam && (
-              <div className="bg-white border border-slate-200 rounded-lg p-5">
+              <div className="bg-surface border border-slate-200 rounded-lg p-5">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <div className="font-semibold text-slate-900">{selectedTeam.name}</div>

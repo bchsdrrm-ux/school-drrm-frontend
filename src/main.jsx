@@ -8,6 +8,7 @@ import ServerWakingBanner from './components/ServerWakingBanner';
 import OfflineBanner from './components/OfflineBanner';
 import PwaUpdatePrompt from './components/PwaUpdatePrompt';
 import './lib/install';
+import './lib/theme';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(

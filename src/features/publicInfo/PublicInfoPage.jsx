@@ -4,6 +4,7 @@ import { api } from '../../lib/apiClient';
 import Logo from '../../components/Logo';
 import Icon from '../../components/icons';
 import AlertsCard from '../../components/AlertsCard';
+import ThemeToggle from '../../components/ThemeToggle';
 import AssemblyAreas from './AssemblyAreas';
 import { useInstallPrompt } from '../../lib/install';
 import { GUIDES, NATIONAL_HOTLINES, PARENT_GUIDE } from './guides';
@@ -71,7 +72,7 @@ function formatSaved(iso) {
 function StatusBanner({ status, data, updatedAt, stale }) {
   if (status === 'loading') {
     return (
-      <div role="status" className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700">
+      <div role="status" className="flex items-center gap-3 rounded-xl border border-slate-200 bg-surface px-4 py-3 text-slate-700">
         <span className="h-4 w-4 animate-spin rounded-full border-2 border-slate-400 border-t-transparent" aria-hidden="true" />
         <span className="text-sm">Checking the school's live status…</span>
       </div>
@@ -145,7 +146,7 @@ function StatusBanner({ status, data, updatedAt, stale }) {
 
 function Card({ title, icon, children, className = '' }) {
   return (
-    <section className={`break-inside-avoid rounded-xl border border-slate-200 bg-white p-5 ${className}`}>
+    <section className={`break-inside-avoid rounded-xl border border-slate-200 bg-surface p-5 ${className}`}>
       <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900">
         {icon && <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-700"><Icon name={icon} className="h-4 w-4" /></span>}
         {title}
@@ -167,7 +168,7 @@ function Skeleton() {
 
 function Guide({ guide, open }) {
   return (
-    <details open={open || undefined} className="group rounded-xl border border-slate-200 bg-white [&_summary::-webkit-details-marker]:hidden print:break-inside-avoid">
+    <details open={open || undefined} className="group rounded-xl border border-slate-200 bg-surface [&_summary::-webkit-details-marker]:hidden print:break-inside-avoid">
       <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4">
         <div>
           <h3 className="text-sm font-semibold text-slate-900">{guide.title}</h3>
@@ -201,26 +202,27 @@ export default function PublicInfoPage() {
   const areas = data?.evacuationAreas || [];
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="border-b border-slate-200 bg-white print:border-0">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+    <div className="min-h-dvh bg-slate-50">
+      <header className="border-b border-slate-200 bg-surface pt-[env(safe-area-inset-top)] print:border-0">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-3 sm:px-6">
           <div className="flex items-center gap-3">
             <Logo size={36} />
-            <div className="leading-tight">
+            <div className="whitespace-nowrap leading-tight">
               <div className="text-sm font-semibold text-slate-900">BCHS DRRM</div>
               <div className="text-xs text-slate-500">Emergency information</div>
             </div>
           </div>
           <div className="flex items-center gap-2 print:hidden">
+            <ThemeToggle />
             {canInstall && (
-              <button onClick={install} className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">
+              <button onClick={install} className="rounded-lg border border-slate-300 bg-surface px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">
                 Install app
               </button>
             )}
-            <button onClick={() => window.print()} className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">
+            <button onClick={() => window.print()} className="hidden rounded-lg border sm:inline-flex border-slate-300 bg-surface px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">
               Print
             </button>
-            <Link to="/login" className="rounded-lg bg-brand-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-800">Staff sign in</Link>
+            <Link to="/login" className="whitespace-nowrap rounded-lg bg-brand-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-800"><span className="sm:hidden">Sign in</span><span className="hidden sm:inline">Staff sign in</span></Link>
           </div>
         </div>
       </header>
@@ -303,7 +305,7 @@ export default function PublicInfoPage() {
           </p>
         )}
 
-        <footer className="pb-6 text-xs text-slate-500">
+        <footer className="pb-[max(1.5rem,env(safe-area-inset-bottom))] text-xs text-slate-500">
           General guidance only. Your school's own DRRM plan and the instructions given by teachers and the DRRM team come first.
         </footer>
       </main>

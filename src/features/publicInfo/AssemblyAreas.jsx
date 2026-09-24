@@ -87,7 +87,7 @@ export default function AssemblyAreas({ status, areas, online }) {
             <button
               onClick={locate}
               disabled={locating}
-              className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-60"
+              className="rounded-lg border border-slate-300 bg-surface px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-60"
             >
               {locating ? 'Finding you…' : me ? 'Update my location' : 'Show my location'}
             </button>

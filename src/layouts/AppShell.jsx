@@ -40,11 +40,11 @@ export default function AppShell() {
   useEffect(() => setSidebarOpen(false), [location.pathname]);
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-dvh">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <div className="flex-1 min-w-0">
-        <header className="sticky top-0 z-20 bg-white border-b border-slate-200 px-3 sm:px-6 py-3 flex items-center justify-between gap-2">
+      <div className="flex-1 min-w-0 pr-[env(safe-area-inset-right)]">
+        <header className="sticky top-0 z-20 bg-surface border-b border-slate-200 px-3 sm:px-6 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <button
               onClick={() => setSidebarOpen(true)}
@@ -71,7 +71,7 @@ export default function AppShell() {
           </div>
         </header>
 
-        <main className="p-3 sm:p-6">
+        <main className="p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:p-6">
           <Outlet />
         </main>
       </div>

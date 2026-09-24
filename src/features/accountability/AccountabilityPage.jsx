@@ -62,13 +62,13 @@ export default function AccountabilityPage() {
       <div className="flex items-center gap-2 mb-4">
         <button
           onClick={() => { setTab('personnel'); setError(''); }}
-          className={`text-sm font-medium px-4 py-2 rounded-lg border ${tab === 'personnel' ? 'bg-brand-700 text-white border-brand-700' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'}`}
+          className={`text-sm font-medium px-4 py-2 rounded-lg border ${tab === 'personnel' ? 'bg-brand-700 text-white border-brand-700' : 'bg-surface text-slate-600 border-slate-300 hover:bg-slate-50'}`}
         >
           Personnel
         </button>
         <button
           onClick={() => { setTab('learners'); setError(''); }}
-          className={`text-sm font-medium px-4 py-2 rounded-lg border ${tab === 'learners' ? 'bg-brand-700 text-white border-brand-700' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'}`}
+          className={`text-sm font-medium px-4 py-2 rounded-lg border ${tab === 'learners' ? 'bg-brand-700 text-white border-brand-700' : 'bg-surface text-slate-600 border-slate-300 hover:bg-slate-50'}`}
         >
           Learners
         </button>
@@ -134,7 +134,7 @@ function PersonnelTab({ activationId, onError }) {
         className="w-full sm:w-80 text-sm rounded-lg border border-slate-300 px-3 py-2 mb-3"
       />
 
-      <div className="bg-white border border-slate-200 rounded-lg divide-y divide-slate-100">
+      <div className="bg-surface border border-slate-200 rounded-lg divide-y divide-slate-100">
         {!filteredRoster.length ? (
           <div className="text-sm text-slate-400 p-6 text-center">No matching personnel.</div>
         ) : (
@@ -212,7 +212,7 @@ function LearnersTab({ activationId, onError }) {
 
   if (!roster.length) {
     return (
-      <div className="text-sm text-slate-500 bg-white border border-slate-200 rounded-lg p-6 text-center">
+      <div className="text-sm text-slate-500 bg-surface border border-slate-200 rounded-lg p-6 text-center">
         No classrooms have been set up yet — add classroom-to-route assignments under{' '}
         <Link to="/evacuation" className="text-brand-700 hover:underline">Evacuation → Classrooms</Link> first.
       </div>
@@ -237,7 +237,7 @@ function LearnersTab({ activationId, onError }) {
         </div>
       )}
 
-      <div className="bg-white border border-slate-200 rounded-lg divide-y divide-slate-100">
+      <div className="bg-surface border border-slate-200 rounded-lg divide-y divide-slate-100">
         {roster.map((c) => {
           const reported = c.record_id != null;
           return (

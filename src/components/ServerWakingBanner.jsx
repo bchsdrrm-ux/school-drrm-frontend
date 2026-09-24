@@ -9,7 +9,7 @@ export default function ServerWakingBanner() {
   if (!slow) return null;
 
   return (
-    <div role="status" className="fixed top-0 inset-x-0 z-[80] flex items-center justify-center gap-2 bg-amber-100 border-b border-amber-300 px-4 py-2 text-sm text-amber-900">
+    <div role="status" className="fixed top-0 inset-x-0 z-[80] flex items-center justify-center gap-2 bg-amber-100 border-b border-amber-300 px-4 pb-2 pt-[max(0.5rem,env(safe-area-inset-top))] text-sm text-amber-900">
       <span className="h-3 w-3 animate-spin rounded-full border-2 border-amber-600 border-t-transparent" aria-hidden="true" />
       Waking up the server — this can take up to a minute after a quiet period. Please wait…
     </div>

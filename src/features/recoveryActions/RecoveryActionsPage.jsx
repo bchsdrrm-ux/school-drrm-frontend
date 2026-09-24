@@ -86,7 +86,7 @@ export default function RecoveryActionsPage() {
           <select
             value={r.status}
             onChange={(e) => setStatus(r, e.target.value)}
-            className="text-xs font-medium border border-slate-300 rounded-full px-2 py-1 bg-white"
+            className="text-xs font-medium border border-slate-300 rounded-full px-2 py-1 bg-surface"
           >
             {Object.entries(STATUS_LABELS).map(([v, label]) => <option key={v} value={v}>{label}</option>)}
           </select>
@@ -107,7 +107,7 @@ export default function RecoveryActionsPage() {
             key={s || 'all'}
             onClick={() => setStatusFilter(s)}
             className={`text-xs font-medium px-3 py-1.5 rounded-full border ${
-              statusFilter === s ? 'bg-brand-700 text-white border-brand-700' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'
+              statusFilter === s ? 'bg-brand-700 text-white border-brand-700' : 'bg-surface text-slate-600 border-slate-300 hover:bg-slate-50'
             }`}
           >
             {s ? STATUS_LABELS[s] : 'All'}

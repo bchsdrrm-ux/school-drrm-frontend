@@ -124,7 +124,7 @@ export default function NotificationsBell() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] max-h-96 overflow-y-auto bg-white border border-slate-200 rounded-lg shadow-lg z-20">
+        <div className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] max-h-96 overflow-y-auto bg-surface border border-slate-200 rounded-lg shadow-lg z-20">
           <div className="px-4 py-2.5 border-b border-slate-200 text-sm font-semibold text-slate-800">Notifications</div>
           {!items.length ? (
             <div className="px-4 py-6 text-sm text-slate-400 text-center">Nothing needs your attention.</div>

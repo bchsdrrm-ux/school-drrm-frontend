@@ -91,7 +91,7 @@ export default function DamageAssessmentPage() {
           <select
             value={r.status}
             onChange={(e) => setStatus(r, e.target.value)}
-            className="text-xs font-medium border border-slate-300 rounded-full px-2 py-1 bg-white"
+            className="text-xs font-medium border border-slate-300 rounded-full px-2 py-1 bg-surface"
           >
             {Object.entries(STATUS_LABELS).map(([v, label]) => <option key={v} value={v}>{label}</option>)}
           </select>
@@ -116,7 +116,7 @@ export default function DamageAssessmentPage() {
       </div>
 
       {canSeeCostSummary && costSummary.length > 0 && (
-        <div className="bg-white border border-slate-200 rounded-lg p-4 mb-4 flex items-center justify-between">
+        <div className="bg-surface border border-slate-200 rounded-lg p-4 mb-4 flex items-center justify-between">
           <span className="text-sm text-slate-600">Total estimated repair cost (all open items)</span>
           <span className="text-lg font-bold text-slate-900">{formatCurrency(totalEstimatedCost)}</span>
         </div>
@@ -128,7 +128,7 @@ export default function DamageAssessmentPage() {
             key={c || 'all'}
             onClick={() => setCategoryFilter(c)}
             className={`text-xs font-medium px-3 py-1.5 rounded-full border ${
-              categoryFilter === c ? 'bg-brand-700 text-white border-brand-700' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'
+              categoryFilter === c ? 'bg-brand-700 text-white border-brand-700' : 'bg-surface text-slate-600 border-slate-300 hover:bg-slate-50'
             }`}
           >
             {c ? CATEGORY_LABELS[c] : 'All'}

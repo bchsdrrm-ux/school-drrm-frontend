@@ -162,7 +162,7 @@ export default function EmergencyModePage() {
         <h1 className="text-lg font-semibold text-slate-900 mb-1">Emergency Mode</h1>
         <p className="text-sm text-slate-500 mb-6">No active emergency. Use this only for a real situation requiring an immediate, school-wide response.</p>
 
-        <form onSubmit={handleActivate} className="bg-white border border-slate-200 rounded-xl p-5 space-y-4">
+        <form onSubmit={handleActivate} className="bg-surface border border-slate-200 rounded-xl p-5 space-y-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">Type of Emergency</label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -172,7 +172,7 @@ export default function EmergencyModePage() {
                   type="button"
                   onClick={() => setActivateForm((f) => ({ ...f, alertType: type }))}
                   className={`text-sm font-medium px-3 py-3 rounded-lg border ${
-                    activateForm.alertType === type ? 'bg-red-600 text-white border-red-600' : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
+                    activateForm.alertType === type ? 'bg-red-600 text-white border-red-600' : 'bg-surface text-slate-700 border-slate-300 hover:bg-slate-50'
                   }`}
                 >
                   {type}
@@ -251,7 +251,7 @@ export default function EmergencyModePage() {
             {activation.notes && <div className="text-sm text-red-50 mt-2 bg-red-700/40 rounded-lg px-3 py-2">{activation.notes}</div>}
           </div>
           {canAllClear && (
-            <button onClick={handleAllClear} className="bg-white text-red-700 font-bold text-sm px-5 py-3 rounded-lg hover:bg-red-50 shrink-0">
+            <button onClick={handleAllClear} className="bg-surface text-red-700 font-bold text-sm px-5 py-3 rounded-lg hover:bg-red-50 shrink-0">
               Declare All Clear
             </button>
           )}
@@ -260,14 +260,14 @@ export default function EmergencyModePage() {
 
       {error && <div className="text-sm text-risk-critical">{error}</div>}
 
-      <section className="bg-white border border-slate-200 rounded-xl p-5">
+      <section className="bg-surface border border-slate-200 rounded-xl p-5">
         <h2 className="text-sm font-semibold text-slate-800 mb-3">What to Do</h2>
         <ul className="list-disc list-inside space-y-1 text-sm text-slate-700">
           {instructions.map((line, i) => <li key={i}>{line}</li>)}
         </ul>
       </section>
 
-      <section className="bg-white border border-slate-200 rounded-xl p-5">
+      <section className="bg-surface border border-slate-200 rounded-xl p-5">
         <h2 className="text-sm font-semibold text-slate-800 mb-3">Emergency Contacts</h2>
         {!contacts.length ? (
           <div className="text-sm text-slate-400">No contacts on file yet.</div>
@@ -283,7 +283,7 @@ export default function EmergencyModePage() {
         )}
       </section>
 
-      <section className="bg-white border border-slate-200 rounded-xl p-5">
+      <section className="bg-surface border border-slate-200 rounded-xl p-5">
         <h2 className="text-sm font-semibold text-slate-800 mb-3">Evacuation Areas</h2>
         {!evacuationAreas.length ? (
           <div className="text-sm text-slate-400">No evacuation areas on file yet.</div>
@@ -299,7 +299,7 @@ export default function EmergencyModePage() {
         )}
       </section>
 
-      <section className="bg-white border border-slate-200 rounded-xl p-5">
+      <section className="bg-surface border border-slate-200 rounded-xl p-5">
         <h2 className="text-sm font-semibold text-slate-800 mb-3">Assigned Response Teams</h2>
         {!teams.length ? (
           <div className="text-sm text-slate-400">No teams set up yet.</div>
@@ -314,7 +314,7 @@ export default function EmergencyModePage() {
         )}
       </section>
 
-      <section className="bg-white border border-slate-200 rounded-xl p-5">
+      <section className="bg-surface border border-slate-200 rounded-xl p-5">
         <h2 className="text-sm font-semibold text-slate-800 mb-3">Headcount / Accountability</h2>
         {latestHeadcount ? (
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-4 text-center">
@@ -358,7 +358,7 @@ export default function EmergencyModePage() {
         )}
       </section>
 
-      <section className="bg-white border border-slate-200 rounded-xl p-5">
+      <section className="bg-surface border border-slate-200 rounded-xl p-5">
         <h2 className="text-sm font-semibold text-slate-800 mb-1">Emergency Communications</h2>
         <p className="text-xs text-slate-400 mb-3">Logged in-system for this activation. SMS/email delivery isn't wired in yet — that's Phase 5.</p>
 

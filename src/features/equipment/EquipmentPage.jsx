@@ -88,7 +88,7 @@ export default function EquipmentPage() {
         <select
           value={locationFilter}
           onChange={(e) => setLocationFilter(e.target.value)}
-          className="text-sm border border-slate-300 rounded-lg px-3 py-1.5 bg-white text-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-600"
+          className="text-sm border border-slate-300 rounded-lg px-3 py-1.5 bg-surface text-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-600"
         >
           <option value="">All locations</option>
           {locations.map((loc) => <option key={loc.id} value={loc.id}>{locationLabel(loc)}</option>)}
@@ -98,7 +98,7 @@ export default function EquipmentPage() {
       {alerts.length > 0 && (
         <div className="mb-4 flex flex-wrap gap-2">
           {alerts.map((a) => (
-            <div key={a.id} className="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded-lg px-3 py-1.5">
+            <div key={a.id} className="flex items-center gap-2 text-xs bg-surface border border-slate-200 rounded-lg px-3 py-1.5">
               <StatusBadge value={a.alert_type} type="alert" />
               <span className="text-slate-600">{a.equipment_code} — {a.equipment_type}</span>
             </div>

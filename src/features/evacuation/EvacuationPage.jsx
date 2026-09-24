@@ -192,19 +192,19 @@ export default function EvacuationPage() {
       <div className="flex items-center gap-2 mb-4">
         <button
           onClick={() => setTab('areas')}
-          className={`text-sm font-medium px-4 py-2 rounded-lg border ${tab === 'areas' ? 'bg-brand-700 text-white border-brand-700' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'}`}
+          className={`text-sm font-medium px-4 py-2 rounded-lg border ${tab === 'areas' ? 'bg-brand-700 text-white border-brand-700' : 'bg-surface text-slate-600 border-slate-300 hover:bg-slate-50'}`}
         >
           Evacuation Areas
         </button>
         <button
           onClick={() => setTab('routes')}
-          className={`text-sm font-medium px-4 py-2 rounded-lg border ${tab === 'routes' ? 'bg-brand-700 text-white border-brand-700' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'}`}
+          className={`text-sm font-medium px-4 py-2 rounded-lg border ${tab === 'routes' ? 'bg-brand-700 text-white border-brand-700' : 'bg-surface text-slate-600 border-slate-300 hover:bg-slate-50'}`}
         >
           Evacuation Routes
         </button>
         <button
           onClick={() => setTab('classrooms')}
-          className={`text-sm font-medium px-4 py-2 rounded-lg border ${tab === 'classrooms' ? 'bg-brand-700 text-white border-brand-700' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'}`}
+          className={`text-sm font-medium px-4 py-2 rounded-lg border ${tab === 'classrooms' ? 'bg-brand-700 text-white border-brand-700' : 'bg-surface text-slate-600 border-slate-300 hover:bg-slate-50'}`}
         >
           Classrooms
         </button>

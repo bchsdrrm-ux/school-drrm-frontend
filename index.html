@@ -2,12 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- viewport-fit=cover lets the app use the whole screen on notched phones; the layout pads for the safe areas. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>BCHS DRRM Management System</title>
     <meta name="description" content="School Disaster Risk Reduction and Management system: hazards, drills, incidents, emergency response and recovery." />
     <meta name="theme-color" content="#1d4ed8" />
+    <meta name="color-scheme" content="light dark" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <!-- Apply the saved (or system) theme before first paint so dark mode never flashes white. -->
+    <script>
+      (function () {
+        try {
+          var p = localStorage.getItem('drrm_theme');
+          var dark = p === 'dark' || (p !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

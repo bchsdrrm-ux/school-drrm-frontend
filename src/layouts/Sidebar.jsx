@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Logo from '../components/Logo';
 import Icon from '../components/icons';
+import useScrollLock from '../lib/useScrollLock';
 
 // Mirrors the Navigation / Information Architecture from the master prompt.
 const NAV_SECTIONS = [
@@ -60,6 +61,26 @@ function readCollapsed() {
  */
 export default function Sidebar({ isOpen, onClose }) {
   const [collapsed, setCollapsed] = useState(readCollapsed);
+  const touchStart = useRef(null);
+
+  // Drawer behavior on phones: the page behind stays put, Escape closes it, and a left swipe closes it.
+  useScrollLock(isOpen);
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [isOpen, onClose]);
+
+  const onTouchStart = (e) => { touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }; };
+  const onTouchEnd = (e) => {
+    const start = touchStart.current;
+    touchStart.current = null;
+    if (!isOpen || !start) return;
+    const dx = e.changedTouches[0].clientX - start.x;
+    const dy = e.changedTouches[0].clientY - start.y;
+    if (dx < -60 && Math.abs(dy) < 40) onClose();
+  };
 
   const toggleCollapsed = () => {
     setCollapsed((c) => {
@@ -78,10 +99,13 @@ export default function Sidebar({ isOpen, onClose }) {
       )}
 
       <aside
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        aria-label="Navigation"
         className={`
-          fixed inset-y-0 left-0 z-40 w-64 shrink-0 bg-white border-r border-slate-200
-          overflow-y-auto transform transition-all duration-200 ease-in-out
-          md:static md:translate-x-0 md:h-screen md:sticky md:top-0
+          fixed inset-y-0 left-0 z-40 w-64 shrink-0 bg-surface border-r border-slate-200
+          overflow-y-auto overscroll-contain pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] md:pt-0 md:pb-0 transform transition-all duration-200 ease-in-out
+          md:static md:translate-x-0 md:h-dvh md:sticky md:top-0
           ${collapsed ? 'md:w-[68px]' : 'md:w-64'}
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
@@ -118,7 +142,7 @@ export default function Sidebar({ isOpen, onClose }) {
                   onClick={onClose}
                   title={collapsed ? item.label : undefined}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-2 rounded-md text-sm mb-0.5 transition-colors ${collapsed ? 'md:justify-center' : ''} ${
+                    `flex items-center gap-3 px-3 py-2.5 md:py-2 rounded-md text-sm mb-0.5 transition-colors ${collapsed ? 'md:justify-center' : ''} ${
                       isActive
                         ? 'bg-brand-50 text-brand-800 font-medium'
                         : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
@@ -133,7 +157,7 @@ export default function Sidebar({ isOpen, onClose }) {
           ))}
         </nav>
 
-        <div className="hidden md:block sticky bottom-0 bg-white border-t border-slate-200 p-2">
+        <div className="hidden md:block sticky bottom-0 bg-surface border-t border-slate-200 p-2">
           <button
             onClick={toggleCollapsed}
             className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-slate-500 hover:bg-slate-50 hover:text-slate-800 ${collapsed ? 'justify-center' : ''}`}

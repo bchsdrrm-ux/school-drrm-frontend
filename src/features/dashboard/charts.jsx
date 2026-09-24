@@ -1,21 +1,21 @@
 import React, { useRef, useState } from 'react';
 
 // Neutral chrome shared by the charts (slate, matching the rest of the app).
-const GRID = '#e2e8f0';
-const BASELINE = '#cbd5e1';
-const INK_SECONDARY = '#475569';
-const INK_MUTED = '#64748b';
-const ACCENT = '#2563eb'; // brand-600: the one highlighted series
-const CONTEXT = '#cbd5e1'; // de-emphasis gray for everything that isn't the story
+const GRID = 'var(--chart-grid)';
+const BASELINE = 'var(--chart-baseline)';
+const INK_SECONDARY = 'var(--chart-ink)';
+const INK_MUTED = 'var(--chart-ink-muted)';
+const ACCENT = 'var(--chart-accent)'; // brand-600: the one highlighted series
+const CONTEXT = 'var(--chart-context)'; // de-emphasis gray for everything that isn't the story
 
 // Risk levels are an ordinal *status*, so they keep the app's risk colors (same as
 // StatusBadge). Hue alone can't separate orange/red/yellow for every reader, so every
 // place that uses these also shows the level as text (letter, legend, tooltip, table).
 export const RISK_LEVELS = {
-  low: { label: 'Low', letter: 'L', solid: '#16a34a', tint: '#dcfce7', ink: '#ffffff' },
-  moderate: { label: 'Moderate', letter: 'M', solid: '#ca8a04', tint: '#fef9c3', ink: '#1c1917' },
-  high: { label: 'High', letter: 'H', solid: '#ea580c', tint: '#ffedd5', ink: '#ffffff' },
-  critical: { label: 'Critical', letter: 'C', solid: '#dc2626', tint: '#fee2e2', ink: '#ffffff' },
+  low: { label: 'Low', letter: 'L', solid: '#15803d', tint: 'var(--tint-low)', ink: '#ffffff' },
+  moderate: { label: 'Moderate', letter: 'M', solid: '#ca8a04', tint: 'var(--tint-moderate)', ink: '#1c1917' },
+  high: { label: 'High', letter: 'H', solid: '#c2410c', tint: 'var(--tint-high)', ink: '#ffffff' },
+  critical: { label: 'Critical', letter: 'C', solid: '#dc2626', tint: 'var(--tint-critical)', ink: '#ffffff' },
 };
 export const RISK_ORDER = ['critical', 'high', 'moderate', 'low'];
 
@@ -36,7 +36,7 @@ function useChartTooltip() {
   const tooltip = tip && (
     <div
       role="tooltip"
-      className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full whitespace-nowrap rounded-lg bg-slate-900 px-3 py-2 text-xs text-white shadow-lg"
+      className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full whitespace-nowrap rounded-lg bg-tip px-3 py-2 text-xs text-white shadow-lg"
       style={{ left: tip.x, top: tip.y - 6 }}
     >
       {tip.content}
@@ -49,7 +49,7 @@ function useChartTooltip() {
 export function ChartCard({ title, subtitle, chart, table, className = '' }) {
   const [asTable, setAsTable] = useState(false);
   return (
-    <section className={`rounded-xl border border-slate-200 bg-white p-5 ${className}`}>
+    <section className={`rounded-xl border border-slate-200 bg-surface p-5 ${className}`}>
       <div className="mb-4 flex items-start justify-between gap-3">
         <div>
           <h2 className="text-sm font-semibold text-slate-900">{title}</h2>
@@ -133,12 +133,12 @@ export function RiskHeatMap({ matrix }) {
                       tabIndex={0}
                       role="img"
                       aria-label={text}
-                      onMouseEnter={(e) => show(e, <><div className="font-semibold">{count} hazard{count === 1 ? '' : 's'}</div><div className="text-slate-300">Likelihood: {l.label} · Impact: {i.label}</div><div className="text-slate-300">{style?.label || 'Unrated'} risk</div></>)}
-                      onFocus={(e) => show(e, <><div className="font-semibold">{count} hazard{count === 1 ? '' : 's'}</div><div className="text-slate-300">Likelihood: {l.label} · Impact: {i.label}</div><div className="text-slate-300">{style?.label || 'Unrated'} risk</div></>)}
+                      onMouseEnter={(e) => show(e, <><div className="font-semibold">{count} hazard{count === 1 ? '' : 's'}</div><div className="text-tip-muted">Likelihood: {l.label} · Impact: {i.label}</div><div className="text-tip-muted">{style?.label || 'Unrated'} risk</div></>)}
+                      onFocus={(e) => show(e, <><div className="font-semibold">{count} hazard{count === 1 ? '' : 's'}</div><div className="text-tip-muted">Likelihood: {l.label} · Impact: {i.label}</div><div className="text-tip-muted">{style?.label || 'Unrated'} risk</div></>)}
                       onMouseLeave={hide}
                       onBlur={hide}
                       className="relative flex h-11 items-end justify-center rounded pb-1 outline-none ring-slate-900 focus-visible:ring-2"
-                      style={{ background: style?.tint || '#f1f5f9' }}
+                      style={{ background: style?.tint || 'var(--tint-empty)' }}
                     >
                       <span className="absolute left-1 top-0.5 text-[9px] font-semibold" style={{ color: INK_SECONDARY }}>{style?.letter}</span>
                       {count > 0 && (
@@ -241,7 +241,7 @@ export function IncidentTrendChart({ trend }) {
   const tipFor = (t) => (
     <>
       <div className="font-semibold">{t.count} incident{t.count === 1 ? '' : 's'}</div>
-      <div className="text-slate-300">{label(t)}</div>
+      <div className="text-tip-muted">{label(t)}</div>
     </>
   );
 
@@ -250,8 +250,8 @@ export function IncidentTrendChart({ trend }) {
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={`Incidents per month, last ${trend.length} months: ${trend.map((t) => `${label(t)} ${t.count}`).join(', ')}`}>
         {ticks.map((v) => (
           <g key={v}>
-            <line x1={pad.left} x2={W - pad.right} y1={y(v)} y2={y(v)} stroke={v === 0 ? BASELINE : GRID} strokeWidth="1" />
-            <text x={pad.left - 6} y={y(v) + 3.5} textAnchor="end" fontSize="10" fill={INK_MUTED}>{v}</text>
+            <line x1={pad.left} x2={W - pad.right} y1={y(v)} y2={y(v)} style={{ stroke: v === 0 ? BASELINE : GRID }} strokeWidth="1" />
+            <text x={pad.left - 6} y={y(v) + 3.5} textAnchor="end" fontSize="10" style={{ fill: INK_MUTED }}>{v}</text>
           </g>
         ))}
         {trend.map((t, idx) => {
@@ -261,11 +261,11 @@ export function IncidentTrendChart({ trend }) {
           const current = idx === trend.length - 1;
           return (
             <g key={t.month}>
-              {t.count > 0 && <path d={barPath(x, h)} fill={current ? ACCENT : CONTEXT} />}
+              {t.count > 0 && <path d={barPath(x, h)} style={{ fill: current ? ACCENT : CONTEXT }} />}
               {t.count > 0 && (
-                <text x={cx} y={y(t.count) - 6} textAnchor="middle" fontSize="11" fontWeight="600" fill={INK_SECONDARY}>{t.count}</text>
+                <text x={cx} y={y(t.count) - 6} textAnchor="middle" fontSize="11" fontWeight="600" style={{ fill: INK_SECONDARY }}>{t.count}</text>
               )}
-              <text x={cx} y={H - 8} textAnchor="middle" fontSize="11" fontWeight={current ? 600 : 400} fill={current ? INK_SECONDARY : INK_MUTED}>
+              <text x={cx} y={H - 8} textAnchor="middle" fontSize="11" fontWeight={current ? 600 : 400} style={{ fill: current ? INK_SECONDARY : INK_MUTED }}>
                 {monthDate(t.month).toLocaleDateString(undefined, { month: 'short' })}
               </text>
               {/* Hit target: the whole band, far larger than the bar itself */}
@@ -287,7 +287,7 @@ export function IncidentTrendChart({ trend }) {
           );
         })}
         {total === 0 && (
-          <text x={pad.left + plotW / 2} y={pad.top + plotH / 2} textAnchor="middle" fontSize="12" fill={INK_MUTED}>No incidents in this period</text>
+          <text x={pad.left + plotW / 2} y={pad.top + plotH / 2} textAnchor="middle" fontSize="12" style={{ fill: INK_MUTED }}>No incidents in this period</text>
         )}
       </svg>
       {tooltip}

@@ -11,7 +11,7 @@ export default function OfflineBanner() {
   }, []);
   if (online) return null;
   return (
-    <div role="status" className="fixed inset-x-0 top-0 z-[90] bg-slate-900 px-4 py-2 text-center text-sm text-white print:hidden">
+    <div role="status" className="fixed inset-x-0 top-0 z-[90] bg-tip px-4 pb-2 pt-[max(0.5rem,env(safe-area-inset-top))] text-center text-sm text-white print:hidden">
       You're offline. You can read what is already loaded, but changes can't be saved until you reconnect.
     </div>
   );

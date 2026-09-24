@@ -87,11 +87,11 @@ export default function AuditLogPage() {
       </div>
 
       <div className="flex items-center gap-2 mb-4 flex-wrap">
-        <select value={entityTypeFilter} onChange={(e) => applyFilter(setEntityTypeFilter)(e.target.value)} className="text-sm border border-slate-300 rounded-lg px-3 py-1.5 bg-white">
+        <select value={entityTypeFilter} onChange={(e) => applyFilter(setEntityTypeFilter)(e.target.value)} className="text-sm border border-slate-300 rounded-lg px-3 py-1.5 bg-surface">
           <option value="">All entities</option>
           {filterOptions.entityTypes.map((t) => <option key={t} value={t}>{t.replaceAll('_', ' ')}</option>)}
         </select>
-        <select value={actionFilter} onChange={(e) => applyFilter(setActionFilter)(e.target.value)} className="text-sm border border-slate-300 rounded-lg px-3 py-1.5 bg-white">
+        <select value={actionFilter} onChange={(e) => applyFilter(setActionFilter)(e.target.value)} className="text-sm border border-slate-300 rounded-lg px-3 py-1.5 bg-surface">
           <option value="">All actions</option>
           {filterOptions.actions.map((a) => <option key={a} value={a}>{a.replaceAll('_', ' ')}</option>)}
         </select>
@@ -110,14 +110,14 @@ export default function AuditLogPage() {
             <button
               disabled={page === 0}
               onClick={() => setPage((p) => Math.max(0, p - 1))}
-              className="text-xs font-medium px-3 py-1.5 rounded-lg border border-slate-300 bg-white disabled:opacity-40 hover:bg-slate-50"
+              className="text-xs font-medium px-3 py-1.5 rounded-lg border border-slate-300 bg-surface disabled:opacity-40 hover:bg-slate-50"
             >
               Previous
             </button>
             <button
               disabled={to >= total}
               onClick={() => setPage((p) => p + 1)}
-              className="text-xs font-medium px-3 py-1.5 rounded-lg border border-slate-300 bg-white disabled:opacity-40 hover:bg-slate-50"
+              className="text-xs font-medium px-3 py-1.5 rounded-lg border border-slate-300 bg-surface disabled:opacity-40 hover:bg-slate-50"
             >
               Next
             </button>

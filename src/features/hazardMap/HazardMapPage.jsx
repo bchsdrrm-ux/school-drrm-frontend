@@ -139,7 +139,7 @@ export default function HazardMapPage() {
       {isLoading ? (
         <div className="text-sm text-slate-500">Loading…</div>
       ) : !floorPlans.length ? (
-        <div className="text-sm text-slate-500 bg-white border border-slate-200 rounded-lg p-8 text-center">
+        <div className="text-sm text-slate-500 bg-surface border border-slate-200 rounded-lg p-8 text-center">
           No floor plans uploaded yet. {canEdit ? 'Click "Upload Floor Plan" to add the first one.' : 'Ask a DRRM Coordinator to upload one.'}
         </div>
       ) : (
@@ -150,7 +150,7 @@ export default function HazardMapPage() {
                 key={plan.id}
                 onClick={() => { setSelectedPlanId(plan.id); setSelectedMarker(null); setPlacingMode(false); }}
                 className={`text-sm font-medium px-3 py-1.5 rounded-lg border ${
-                  selectedPlanId === plan.id ? 'bg-brand-700 text-white border-brand-700' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'
+                  selectedPlanId === plan.id ? 'bg-brand-700 text-white border-brand-700' : 'bg-surface text-slate-600 border-slate-300 hover:bg-slate-50'
                 }`}
               >
                 {plan.building}{plan.floor ? ` — ${plan.floor}` : ''}
@@ -214,7 +214,7 @@ export default function HazardMapPage() {
                       <li
                         key={m.id}
                         onClick={() => setSelectedMarker(m)}
-                        className={`text-sm bg-white border rounded-lg px-3 py-2 cursor-pointer ${selectedMarker?.id === m.id ? 'border-brand-600 ring-1 ring-brand-600' : 'border-slate-200 hover:border-slate-300'}`}
+                        className={`text-sm bg-surface border rounded-lg px-3 py-2 cursor-pointer ${selectedMarker?.id === m.id ? 'border-brand-600 ring-1 ring-brand-600' : 'border-slate-200 hover:border-slate-300'}`}
                       >
                         <div className="flex items-center gap-2">
                           <span className="w-2 h-2 rounded-full inline-block shrink-0" style={{ backgroundColor: MARKER_STYLES[m.marker_type]?.color }} />
@@ -227,7 +227,7 @@ export default function HazardMapPage() {
                 )}
 
                 {selectedMarker && (
-                  <div className="mt-4 bg-white border border-slate-200 rounded-lg p-3">
+                  <div className="mt-4 bg-surface border border-slate-200 rounded-lg p-3">
                     <div className="flex items-center justify-between mb-1">
                       <div className="font-medium text-slate-800 text-sm">{selectedMarker.label}</div>
                       <button onClick={() => setSelectedMarker(null)} className="text-slate-400 hover:text-slate-600 text-sm">✕</button>

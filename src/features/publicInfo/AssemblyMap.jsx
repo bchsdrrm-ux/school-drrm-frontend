@@ -18,6 +18,7 @@ export default function AssemblyMap({ areas, me, activeNumber, onSelect }) {
     const map = L.map(elRef.current, { zoomControl: true, scrollWheelZoom: false });
     const street = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
+      className: 'map-street-tiles', // dimmed in dark mode (see index.css)
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     });
     const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {

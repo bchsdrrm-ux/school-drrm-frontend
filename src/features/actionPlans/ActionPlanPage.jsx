@@ -115,7 +115,7 @@ export default function ActionPlanPage() {
           <select
             value={r.status}
             onChange={(e) => setStatus(r, e.target.value)}
-            className="text-xs font-medium border border-slate-300 rounded-full px-2 py-1 bg-white"
+            className="text-xs font-medium border border-slate-300 rounded-full px-2 py-1 bg-surface"
           >
             {Object.entries(STATUS_LABELS).map(([v, label]) => <option key={v} value={v}>{label}</option>)}
           </select>
@@ -135,15 +135,15 @@ export default function ActionPlanPage() {
 
       {canManage && summary && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
-          <div className="bg-white border border-slate-200 rounded-lg p-4">
+          <div className="bg-surface border border-slate-200 rounded-lg p-4">
             <div className="text-xs text-slate-500 mb-1">Total Allocated</div>
             <div className="text-lg font-bold text-slate-900">{formatCurrency(summary.totalAllocated)}</div>
           </div>
-          <div className="bg-white border border-slate-200 rounded-lg p-4">
+          <div className="bg-surface border border-slate-200 rounded-lg p-4">
             <div className="text-xs text-slate-500 mb-1">Total Utilized</div>
             <div className="text-lg font-bold text-slate-900">{formatCurrency(summary.totalUtilized)}</div>
           </div>
-          <div className="bg-white border border-slate-200 rounded-lg p-4">
+          <div className="bg-surface border border-slate-200 rounded-lg p-4">
             <div className="text-xs text-slate-500 mb-1">Remaining</div>
             <div className={`text-lg font-bold ${summary.totalRemaining < 0 ? 'text-risk-critical' : 'text-slate-900'}`}>{formatCurrency(summary.totalRemaining)}</div>
           </div>
@@ -156,7 +156,7 @@ export default function ActionPlanPage() {
             key={s || 'all'}
             onClick={() => setStatusFilter(s)}
             className={`text-xs font-medium px-3 py-1.5 rounded-full border ${
-              statusFilter === s ? 'bg-brand-700 text-white border-brand-700' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'
+              statusFilter === s ? 'bg-brand-700 text-white border-brand-700' : 'bg-surface text-slate-600 border-slate-300 hover:bg-slate-50'
             }`}
           >
             {s ? STATUS_LABELS[s] : 'All'}

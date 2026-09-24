@@ -28,7 +28,7 @@ export default function PwaUpdatePrompt() {
 
   if (!needRefresh) return null;
   return (
-    <div role="status" className="fixed bottom-4 left-4 z-[75] flex max-w-sm items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm shadow-lg">
+    <div role="status" className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] z-[75] flex max-w-sm items-center gap-3 rounded-xl border border-slate-200 bg-surface px-4 py-3 text-sm shadow-lg">
       <span className="text-slate-700">A new version is available.</span>
       <button onClick={() => updateServiceWorker(true)} className="rounded-lg bg-brand-700 px-3 py-1.5 text-xs font-medium text-white hover:bg-brand-800">Refresh</button>
       <button onClick={() => setNeedRefresh(false)} className="text-xs font-medium text-slate-500 hover:text-slate-800">Later</button>

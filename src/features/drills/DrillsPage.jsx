@@ -173,7 +173,7 @@ export default function DrillsPage() {
             key={s || 'all'}
             onClick={() => setStatusFilter(s)}
             className={`text-xs font-medium px-3 py-1.5 rounded-full border ${
-              statusFilter === s ? 'bg-brand-700 text-white border-brand-700' : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-50'
+              statusFilter === s ? 'bg-brand-700 text-white border-brand-700' : 'bg-surface text-slate-600 border-slate-300 hover:bg-slate-50'
             }`}
           >
             {s ? s[0].toUpperCase() + s.slice(1) : 'All'}

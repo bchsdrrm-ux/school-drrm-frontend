@@ -13,7 +13,7 @@ export default function FormField({ label, as = 'input', children, className = '
       {as === 'select' ? (
         <Component
           {...props}
-          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-600 focus:border-brand-600"
+          className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm bg-surface focus:outline-none focus:ring-2 focus:ring-brand-600 focus:border-brand-600"
         >
           {children}
         </Component>

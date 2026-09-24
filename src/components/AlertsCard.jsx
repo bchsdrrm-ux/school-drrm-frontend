@@ -12,7 +12,7 @@ export default function AlertsCard() {
   if (status === 'checking' || status === 'unavailable') return null;
 
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-5 print:hidden" aria-labelledby="alerts-heading">
+    <section className="rounded-xl border border-slate-200 bg-surface p-5 print:hidden" aria-labelledby="alerts-heading">
       <div className="flex items-start gap-3">
         <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
           <Icon name="incident" className="h-4 w-4" />

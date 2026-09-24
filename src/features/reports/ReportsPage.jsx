@@ -258,7 +258,7 @@ export default function ReportsPage() {
         <select
           value={activeKey}
           onChange={(e) => runReport(e.target.value)}
-          className="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white min-w-[260px]"
+          className="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-surface min-w-[260px]"
         >
           {REPORT_GROUPS.map((group) => (
             <optgroup key={group.label} label={group.label}>
@@ -303,7 +303,7 @@ function SummaryReportView({ data }) {
       </div>
 
       {data.sections.map((section, i) => (
-        <div key={i} className="bg-white border border-slate-200 rounded-lg p-4">
+        <div key={i} className="bg-surface border border-slate-200 rounded-lg p-4">
           <h3 className="text-sm font-semibold text-slate-800 mb-3">{section.title}</h3>
 
           {section.stats && (

@@ -1,12 +1,166 @@
+@import './dark.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-slate-50 text-slate-800;
+/* ---------------------------------------------------------------------------
+ * Theme variables. Light values are Tailwind's own slate scale; dark values are
+ * hand-picked so text stays readable (slate-500 on a card is about 6.6:1).
+ * Channels are space-separated RGB so Tailwind's opacity modifiers keep working.
+ * ------------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+  --slate-50: 248 250 252;
+  --slate-100: 241 245 249;
+  --slate-200: 226 232 240;
+  --slate-300: 203 213 225;
+  --slate-400: 94 108 130; /* darker than Tailwind default: small muted text needs 4.5:1 on white */
+  --slate-500: 100 116 139;
+  --slate-600: 71 85 105;
+  --slate-700: 51 65 85;
+  --slate-800: 30 41 59;
+  --slate-900: 15 23 42;
+  --slate-950: 2 6 23;
+  --surface: 255 255 255;
+
+  /* Chart tokens (used by the dashboard charts) */
+  --chart-grid: #e2e8f0;
+  --chart-baseline: #cbd5e1;
+  --chart-ink: #475569;
+  --chart-ink-muted: #64748b;
+  --chart-context: #cbd5e1;
+  --chart-accent: #2563eb;
+  --tint-low: #dcfce7;
+  --tint-moderate: #fef9c3;
+  --tint-high: #ffedd5;
+  --tint-critical: #fee2e2;
+  --tint-empty: #f1f5f9;
 }
 
-/* Campus map pins (Leaflet divIcons) */
+.dark {
+  color-scheme: dark;
+  --slate-50: 11 17 32;
+  --slate-100: 26 36 56;
+  --slate-200: 38 50 74;
+  --slate-300: 53 67 95;
+  --slate-400: 122 138 163;
+  --slate-500: 148 163 184;
+  --slate-600: 169 182 204;
+  --slate-700: 195 205 221;
+  --slate-800: 219 227 239;
+  --slate-900: 241 245 249;
+  --slate-950: 248 250 252;
+  --surface: 17 26 46;
+
+  --chart-grid: #26324a;
+  --chart-baseline: #35435f;
+  --chart-ink: #a9b6cc;
+  --chart-ink-muted: #94a3b8;
+  --chart-context: #3a4a68;
+  --chart-accent: #60a5fa;
+  --tint-low: #14342a;
+  --tint-moderate: #3a3416;
+  --tint-high: #3d2a17;
+  --tint-critical: #431d24;
+  --tint-empty: #182238;
+}
+
+/* ---------------------------------------------------------------------------
+ * Base
+ * ------------------------------------------------------------------------- */
+@layer base {
+  html {
+    -webkit-tap-highlight-color: rgb(37 99 235 / 0.15);
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-800;
+  }
+
+  /* Form fields carry no background class of their own; give them the card surface. */
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']),
+  select,
+  textarea {
+    background-color: rgb(var(--surface));
+  }
+
+  /* No 300ms tap delay or double-tap zoom on controls. */
+  a, button, summary, select, label, [role='button'], [role='switch'] {
+    touch-action: manipulation;
+  }
+}
+
+/* Brand blue and error text need to be lighter on dark surfaces to stay readable. */
+.dark .text-risk-critical { color: #f87171; }
+.dark .text-brand-600 { color: #60a5fa; }
+.dark .text-brand-700 { color: #93c5fd; }
+.dark .text-brand-800 { color: #bfdbfe; }
+.dark .hover\:text-brand-800:hover { color: #bfdbfe; }
+.dark .focus\:ring-brand-600:focus { --tw-ring-color: #60a5fa; }
+.dark .focus\:border-brand-600:focus { border-color: #60a5fa; }
+.dark .border-brand-200 { border-color: rgb(59 130 246 / 0.4); }
+
+/* ---------------------------------------------------------------------------
+ * Real-device behavior
+ * ------------------------------------------------------------------------- */
+
+/* iOS zooms the page when a field under 16px is focused; the app's fields are
+   14px on purpose on desktop, so raise them on touch devices only. !important
+   is needed to beat the text-sm utility. */
+@media (pointer: coarse) {
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Bigger invisible tap area (about +12px) without changing the layout. */
+  button,
+  [role='switch'] {
+    position: relative;
+  }
+  button::after,
+  [role='switch']::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+  }
+}
+
+/* Motion: no pulsing or slow transitions for people who ask for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse { animation: none; }
+  *, ::before, ::after { transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+/* Installed app: a pull-down gesture must not reload the page mid-form or mid-headcount. */
+@media (display-mode: standalone) {
+  html, body { overscroll-behavior-y: none; }
+}
+
+/* ---------------------------------------------------------------------------
+ * Maps in dark mode: dim the street tiles (satellite is left alone) and restyle controls.
+ * ------------------------------------------------------------------------- */
+.dark .map-street-tiles {
+  filter: invert(1) hue-rotate(180deg) brightness(0.92) contrast(0.9);
+}
+.dark .leaflet-container { background: #0b1120; }
+.dark .leaflet-bar a,
+.dark .leaflet-control-layers {
+  background-color: rgb(var(--surface));
+  color: rgb(var(--slate-800));
+  border-color: rgb(var(--slate-200));
+}
+.dark .leaflet-control-attribution {
+  background: rgb(17 26 46 / 0.8) !important;
+  color: #94a3b8 !important;
+}
+.dark .leaflet-control-attribution a { color: #93c5fd !important; }
+
+/* ---------------------------------------------------------------------------
+ * Campus map pins (Leaflet divIcons)
+ * ------------------------------------------------------------------------- */
 .drrm-pin-wrap { background: transparent; border: 0; }
 .drrm-pin {
   position: relative;
@@ -22,6 +176,7 @@ body {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
 }
 .drrm-pin--selected { box-shadow: 0 0 0 3px #0f172a, 0 1px 4px rgba(0, 0, 0, 0.45); }
+.dark .drrm-pin--selected { box-shadow: 0 0 0 3px #f1f5f9, 0 1px 4px rgba(0, 0, 0, 0.45); }
 .drrm-pin__badge {
   position: absolute;
   top: -7px;
@@ -38,5 +193,4 @@ body {
   font-weight: 800;
   box-shadow: 0 0 0 1px #94a3b8;
 }
-
 .drrm-pin--empty { width: 16px; height: 16px; border-width: 2px; }

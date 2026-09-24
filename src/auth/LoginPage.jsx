@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import Logo from '../components/Logo';
+import ThemeToggle from '../components/ThemeToggle';
 
 const FEATURES = [
   'Hazard inventory and risk assessment',
@@ -36,7 +37,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-dvh flex">
       <aside className="hidden lg:flex lg:w-[46%] flex-col justify-between bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700 p-12 text-white">
         <div className="flex items-center gap-3">
           <Logo size={44} />
@@ -64,7 +65,10 @@ export default function LoginPage() {
         <p className="text-xs text-blue-200">Authorized school personnel only.</p>
       </aside>
 
-      <main className="flex flex-1 items-center justify-center bg-slate-50 px-4 py-10">
+      <main className="relative flex flex-1 items-center justify-center bg-slate-50 px-4 py-10">
+        <div className="absolute right-[max(1rem,env(safe-area-inset-right))] top-[max(1rem,env(safe-area-inset-top))]">
+          <ThemeToggle />
+        </div>
         <div className="w-full max-w-sm">
           <div className="mb-8 flex items-center gap-3 lg:hidden">
             <Logo size={40} />
@@ -77,7 +81,7 @@ export default function LoginPage() {
           <h1 className="text-2xl font-semibold text-slate-900">Welcome back</h1>
           <p className="mt-1 mb-6 text-sm text-slate-500">Sign in to continue</p>
 
-          <form onSubmit={handleSubmit} className="space-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          <form onSubmit={handleSubmit} className="space-y-4 rounded-xl border border-slate-200 bg-surface p-6 shadow-sm">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">Email</label>
               <input

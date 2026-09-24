@@ -1,11 +1,12 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import useScrollLock from '../lib/useScrollLock';
 
 const FeedbackContext = createContext(null);
 
 const TOAST_STYLES = {
   success: 'border-green-200 bg-green-50 text-green-800',
   error: 'border-red-200 bg-red-50 text-red-800',
-  info: 'border-slate-200 bg-white text-slate-800',
+  info: 'border-slate-200 bg-surface text-slate-800',
 };
 
 /**
@@ -18,6 +19,7 @@ export function FeedbackProvider({ children }) {
   const [toasts, setToasts] = useState([]);
   const [dialog, setDialog] = useState(null);
   const nextId = useRef(1);
+  useScrollLock(!!dialog);
 
   const dismiss = useCallback((id) => setToasts((t) => t.filter((x) => x.id !== id)), []);
 
@@ -51,7 +53,7 @@ export function FeedbackProvider({ children }) {
     <FeedbackContext.Provider value={{ toast, confirm }}>
       {children}
 
-      <div className="fixed bottom-4 right-4 z-[60] flex flex-col gap-2 w-[calc(100vw-2rem)] max-w-sm" aria-live="polite">
+      <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] z-[60] flex flex-col gap-2 w-[calc(100vw-2rem)] max-w-sm" aria-live="polite">
         {toasts.map((t) => (
           <div key={t.id} role="status" className={`flex items-start gap-2 rounded-lg border px-4 py-3 text-sm shadow-lg ${TOAST_STYLES[t.type]}`}>
             <span className="flex-1">{t.message}</span>
@@ -61,12 +63,12 @@ export function FeedbackProvider({ children }) {
       </div>
 
       {dialog && (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/40 px-4" onClick={() => settle(false)}>
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/40 px-4 pb-[env(safe-area-inset-bottom)]" onClick={() => settle(false)}>
           <div
             role="alertdialog"
             aria-modal="true"
             aria-labelledby="confirm-title"
-            className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
+            className="w-full max-w-md rounded-xl bg-surface p-6 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <h2 id="confirm-title" className="text-base font-semibold text-slate-900">{dialog.title || 'Are you sure?'}</h2>
@@ -74,7 +76,7 @@ export function FeedbackProvider({ children }) {
             <div className="mt-6 flex justify-end gap-2">
               <button
                 onClick={() => settle(false)}
-                className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                className="rounded-lg border border-slate-300 bg-surface px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
               >
                 {dialog.cancelLabel || 'Cancel'}
               </button>

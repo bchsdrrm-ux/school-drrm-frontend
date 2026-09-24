@@ -40,7 +40,7 @@ function relativeTime(dateLike) {
 
 function Card({ title, action, children, className = '' }) {
   return (
-    <section className={`rounded-xl border border-slate-200 bg-white p-5 ${className}`}>
+    <section className={`rounded-xl border border-slate-200 bg-surface p-5 ${className}`}>
       <div className="mb-3 flex items-center justify-between gap-3">
         <h2 className="text-sm font-semibold text-slate-900">{title}</h2>
         {action}
@@ -65,7 +65,7 @@ function EmptyNote({ icon = 'check', children }) {
 
 function StatTile({ to, icon, label, value, detail, footer }) {
   return (
-    <Link to={to} className="group block rounded-xl border border-slate-200 bg-white p-4 transition-shadow hover:shadow-sm sm:p-5">
+    <Link to={to} className="group block rounded-xl border border-slate-200 bg-surface p-4 transition-shadow hover:shadow-sm sm:p-5">
       <div className="flex items-center gap-2 text-sm text-slate-500">
         <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-700"><Icon name={icon} className="h-4 w-4" /></span>
         {label}
@@ -150,10 +150,10 @@ export default function DashboardPage() {
         <div className="mb-5 h-8 w-64 animate-pulse rounded bg-slate-200" />
         <div className="mb-5 h-16 animate-pulse rounded-xl bg-slate-200/70" />
         <div className="mb-5 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {[0, 1, 2, 3].map((i) => <div key={i} className="h-36 animate-pulse rounded-xl border border-slate-200 bg-white" />)}
+          {[0, 1, 2, 3].map((i) => <div key={i} className="h-36 animate-pulse rounded-xl border border-slate-200 bg-surface" />)}
         </div>
         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-          {[0, 1].map((i) => <div key={i} className="h-72 animate-pulse rounded-xl border border-slate-200 bg-white" />)}
+          {[0, 1].map((i) => <div key={i} className="h-72 animate-pulse rounded-xl border border-slate-200 bg-surface" />)}
         </div>
       </div>
     );
@@ -203,7 +203,7 @@ export default function DashboardPage() {
           <Link to="/hazards?new=1" className="inline-flex items-center gap-1.5 rounded-lg bg-brand-700 px-3.5 py-2 text-sm font-medium text-white hover:bg-brand-800">
             <Icon name="plus" className="h-4 w-4" /> Report hazard
           </Link>
-          <Link to="/incidents?new=1" className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
+          <Link to="/incidents?new=1" className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-surface px-3.5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
             <Icon name="plus" className="h-4 w-4" /> Report incident
           </Link>
         </div>

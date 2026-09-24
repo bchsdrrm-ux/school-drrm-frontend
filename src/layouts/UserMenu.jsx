@@ -3,6 +3,7 @@ import { useAuth } from '../auth/AuthContext';
 import ChangePasswordModal from '../auth/ChangePasswordModal';
 import { useInstallPrompt } from '../lib/install';
 import { usePushAlerts } from '../lib/push';
+import ThemeToggle from '../components/ThemeToggle';
 
 export default function UserMenu() {
   const { user, logout } = useAuth();
@@ -46,11 +47,15 @@ export default function UserMenu() {
       </button>
 
       {open && (
-        <div role="menu" className="absolute right-0 mt-2 w-60 rounded-xl border border-slate-200 bg-white py-1 shadow-lg z-30">
+        <div role="menu" className="absolute right-0 mt-2 w-60 rounded-xl border border-slate-200 bg-surface py-1 shadow-lg z-30">
           <div className="px-4 py-3 border-b border-slate-100">
             <div className="text-sm font-medium text-slate-900">{user?.firstName} {user?.lastName}</div>
             <div className="text-xs text-slate-500 truncate">{user?.email}</div>
             <div className="text-xs text-slate-500 capitalize">{role}</div>
+          </div>
+          <div className="flex items-center justify-between gap-2 px-4 py-2">
+            <span className="text-sm text-slate-700">Theme</span>
+            <ThemeToggle />
           </div>
           <button
             role="menuitem"

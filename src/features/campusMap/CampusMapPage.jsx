@@ -23,7 +23,7 @@ const LAYERS = [
 const TONES = {
   red: { color: '#dc2626', text: '#ffffff', label: 'Critical or high-risk hazard, or an active incident' },
   amber: { color: '#ca8a04', text: '#1c1917', label: 'Moderate-risk hazard or an equipment alert' },
-  green: { color: '#16a34a', text: '#ffffff', label: 'Low-risk hazards only' },
+  green: { color: '#15803d', text: '#ffffff', label: 'Low-risk hazards only' },
   teal: { color: '#0d9488', text: '#ffffff', label: 'Evacuation area only' },
   blue: { color: '#2563eb', text: '#ffffff', label: 'Equipment only, no alerts' },
   gray: { color: '#94a3b8', text: '#ffffff', label: 'Placed, nothing recorded for the selected layers' },
@@ -139,6 +139,7 @@ export default function CampusMapPage() {
     const map = L.map(mapEl.current, { zoomControl: true }).setView(DEFAULT_VIEW.center, DEFAULT_VIEW.zoom);
     const street = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
+      className: 'map-street-tiles', // dimmed in dark mode (see index.css)
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     });
     const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -265,7 +266,7 @@ export default function CampusMapPage() {
             key={l.key}
             aria-pressed={layers[l.key]}
             onClick={() => setLayers((s) => ({ ...s, [l.key]: !s[l.key] }))}
-            className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${layers[l.key] ? 'border-brand-600 bg-brand-50 text-brand-800' : 'border-slate-300 bg-white text-slate-500 hover:bg-slate-50'}`}
+            className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${layers[l.key] ? 'border-brand-600 bg-brand-50 text-brand-800' : 'border-slate-300 bg-surface text-slate-500 hover:bg-slate-50'}`}
           >
             {layers[l.key] ? '✓ ' : ''}{l.label} ({layerCounts[l.key]})
           </button>
@@ -283,15 +284,15 @@ export default function CampusMapPage() {
       <div className="grid gap-4 lg:grid-cols-[1fr_20rem]">
         <div>
           <div className="relative isolate overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
-            <div ref={mapEl} className="h-[55vh] min-h-[360px] w-full" role="application" aria-label="Campus map" />
+            <div ref={mapEl} className="h-[55dvh] min-h-[360px] w-full" role="application" aria-label="Campus map" />
             {placing && (
-              <div role="status" className="pointer-events-none absolute inset-x-0 top-3 z-[500] mx-auto w-fit max-w-[90%] rounded-lg bg-slate-900 px-4 py-2 text-sm text-white shadow-lg">
+              <div role="status" className="pointer-events-none absolute inset-x-0 top-3 z-[500] mx-auto w-fit max-w-[90%] rounded-lg bg-tip px-4 py-2 text-sm text-white shadow-lg">
                 Click the map where this location is
               </div>
             )}
             {data && !data.needsSetup && placedCount === 0 && !placing && (
               <div className="pointer-events-none absolute inset-0 z-[400] flex items-center justify-center p-6">
-                <div className="max-w-sm rounded-xl bg-white/95 p-5 text-center text-sm text-slate-700 shadow-lg">
+                <div className="max-w-sm rounded-xl bg-surface/95 p-5 text-center text-sm text-slate-700 shadow-lg">
                   <div className="mb-1 font-semibold text-slate-900">No locations are on the map yet</div>
                   {canManage
                     ? 'Choose a location under "Place a location", then click its spot on the map. Once placed, its hazards, equipment and incidents appear here automatically.'
@@ -308,20 +309,20 @@ export default function CampusMapPage() {
                 {t.label}
               </li>
             ))}
-            <li className="flex items-center gap-1.5"><span className="rounded-full bg-white px-1 text-[9px] font-bold text-slate-700 ring-1 ring-slate-400">A</span> Has an evacuation area</li>
+            <li className="flex items-center gap-1.5"><span className="rounded-full bg-surface px-1 text-[9px] font-bold text-slate-700 ring-1 ring-slate-400">A</span> Has an evacuation area</li>
           </ul>
         </div>
 
         <aside className="space-y-4">
           {canManage && (
-            <section className="rounded-xl border border-slate-200 bg-white p-4">
+            <section className="rounded-xl border border-slate-200 bg-surface p-4">
               <h2 className="mb-2 text-sm font-semibold text-slate-900">Place a location</h2>
               <label className="block text-xs text-slate-500" htmlFor="place-location">Location</label>
               <select
                 id="place-location"
                 value={placeId}
                 onChange={(e) => { setPlaceId(e.target.value); cancelPlacing(); }}
-                className="mb-2 mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm"
+                className="mb-2 mt-1 w-full rounded-lg border border-slate-300 bg-surface px-3 py-2 text-sm"
               >
                 <option value="">Choose a location…</option>
                 {groups.map((g) => (
@@ -345,7 +346,7 @@ export default function CampusMapPage() {
             </section>
           )}
 
-          <section className="rounded-xl border border-slate-200 bg-white p-4" aria-live="polite">
+          <section className="rounded-xl border border-slate-200 bg-surface p-4" aria-live="polite">
             {selected ? (
               <div>
                 <div className="mb-3 flex items-start justify-between gap-2">
