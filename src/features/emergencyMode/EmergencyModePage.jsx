@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { api } from '../../lib/apiClient';
 import { useAuth, ROLE_GROUPS, hasRole } from '../../auth/AuthContext';
 import Button from '../../components/Button';
+import { useFeedback } from '../../components/Toast';
 
 const ALERT_TYPES = ['Earthquake', 'Fire', 'Evacuation', 'Lockdown', 'Weather Suspension', 'Other'];
 
@@ -28,6 +29,7 @@ function formatDuration(startIso) {
 
 export default function EmergencyModePage() {
   const { user } = useAuth();
+  const { toast, confirm } = useFeedback();
   const canManage = hasRole(user, ROLE_GROUPS.DRRM_OPERATIONAL);
   const canAllClear = hasRole(user, ROLE_GROUPS.DRRM_MANAGERS);
 
@@ -101,11 +103,17 @@ export default function EmergencyModePage() {
   };
 
   const handleAllClear = async () => {
-    if (!window.confirm('Declare All Clear? This will end the active emergency for everyone.')) return;
+    const ok = await confirm({
+      title: 'Declare All Clear?',
+      message: 'This ends the active emergency for everyone. Make sure all persons are accounted for first.',
+      confirmLabel: 'Declare All Clear',
+    });
+    if (!ok) return;
     try {
       await api.put(`/emergency-mode/${activation.id}/all-clear`);
       setActivation(null);
       setDetail(null);
+      toast.success('All Clear declared. Emergency Mode has ended.');
     } catch (err) {
       setError(err.message);
     }

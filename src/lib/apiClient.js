@@ -1,5 +1,39 @@
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
+// Slow-request tracking: if anything is in flight for more than SLOW_MS,
+// subscribers (ServerWakingBanner) are told, until all requests settle.
+const SLOW_MS = 4000;
+const slowListeners = new Set();
+let isSlow = false;
+let pendingCount = 0;
+let slowTimer = null;
+
+function setSlow(value) {
+  if (isSlow === value) return;
+  isSlow = value;
+  slowListeners.forEach((fn) => fn(value));
+}
+
+export function onSlowChange(fn) {
+  slowListeners.add(fn);
+  return () => slowListeners.delete(fn);
+}
+
+async function trackedFetch(url, options) {
+  pendingCount += 1;
+  if (!slowTimer) slowTimer = setTimeout(() => setSlow(true), SLOW_MS);
+  try {
+    return await fetch(url, options);
+  } finally {
+    pendingCount -= 1;
+    if (pendingCount === 0) {
+      clearTimeout(slowTimer);
+      slowTimer = null;
+      setSlow(false);
+    }
+  }
+}
+
 function getAccessToken() { return localStorage.getItem('drrm_access_token'); }
 function getRefreshToken() { return localStorage.getItem('drrm_refresh_token'); }
 
@@ -21,7 +55,7 @@ async function performRefresh() {
   const refreshToken = getRefreshToken();
   if (!refreshToken) throw new Error('No refresh token available');
 
-  const res = await fetch(`${BASE_URL}/auth/refresh`, {
+  const res = await trackedFetch(`${BASE_URL}/auth/refresh`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ refreshToken }),
@@ -56,7 +90,7 @@ function refreshAccessToken() {
 async function request(path, { method = 'GET', body, headers = {} } = {}, isRetry = false) {
   const accessToken = getAccessToken();
 
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await trackedFetch(`${BASE_URL}${path}`, {
     method,
     headers: {
       'Content-Type': 'application/json',
@@ -66,7 +100,9 @@ async function request(path, { method = 'GET', body, headers = {} } = {}, isRetr
     body: body ? JSON.stringify(body) : undefined,
   });
 
-  if (res.status === 401) {
+  // A 401 from the login endpoint itself means wrong credentials, not an
+  // expired session — let it fall through so the form can show the message.
+  if (res.status === 401 && path !== '/auth/login') {
     if (isRetry) {
       clearSessionAndRedirect();
       return null;
@@ -99,7 +135,7 @@ async function request(path, { method = 'GET', body, headers = {} } = {}, isRetr
 async function upload(path, formData, isRetry = false) {
   const accessToken = getAccessToken();
 
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const res = await trackedFetch(`${BASE_URL}${path}`, {
     method: 'POST',
     headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
     body: formData,

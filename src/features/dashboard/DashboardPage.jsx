@@ -32,7 +32,17 @@ export default function DashboardPage() {
     return <div className="text-sm text-risk-critical">{error}</div>;
   }
   if (!summary) {
-    return <div className="text-sm text-slate-500">Loading dashboard…</div>;
+    return (
+      <div role="status" aria-label="Loading dashboard">
+        <div className="mb-4 h-6 w-32 animate-pulse rounded bg-slate-200" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          {[0, 1, 2, 3].map((i) => <div key={i} className="h-36 animate-pulse rounded-xl border border-slate-200 bg-white" />)}
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[0, 1].map((i) => <div key={i} className="h-40 animate-pulse rounded-xl border border-slate-200 bg-white" />)}
+        </div>
+      </div>
+    );
   }
 
   return (

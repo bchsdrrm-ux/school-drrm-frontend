@@ -7,10 +7,25 @@ import React from 'react';
  */
 export default function Table({ columns, rows, isLoading, emptyMessage = 'No records found.' }) {
   if (isLoading) {
-    return <div className="text-sm text-slate-500 py-8 text-center">Loading…</div>;
+    return (
+      <div className="overflow-hidden rounded-lg border border-slate-200 bg-white" role="status" aria-label="Loading">
+        <div className="h-10 bg-slate-50 border-b border-slate-200" />
+        {[0, 1, 2, 3, 4].map((i) => (
+          <div key={i} className="flex gap-4 px-4 py-3.5 border-b border-slate-100 last:border-0">
+            {(columns.length ? columns : [0, 1, 2]).slice(0, 5).map((c, j) => (
+              <div key={j} className="h-3 flex-1 animate-pulse rounded bg-slate-100" />
+            ))}
+          </div>
+        ))}
+      </div>
+    );
   }
   if (!rows?.length) {
-    return <div className="text-sm text-slate-500 py-8 text-center">{emptyMessage}</div>;
+    return (
+      <div className="rounded-lg border border-dashed border-slate-300 bg-white py-10 text-center text-sm text-slate-500">
+        {emptyMessage}
+      </div>
+    );
   }
 
   return (

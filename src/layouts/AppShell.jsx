@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import NotificationsBell from './NotificationsBell';
-import { useAuth } from '../auth/AuthContext';
+import UserMenu from './UserMenu';
 import { api } from '../lib/apiClient';
 
 /**
@@ -22,7 +22,6 @@ import { api } from '../lib/apiClient';
  * hamburger button that only renders on that same breakpoint.
  */
 export default function AppShell() {
-  const { user, logout } = useAuth();
   const location = useLocation();
   const [isActive, setIsActive] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -68,16 +67,7 @@ export default function AppShell() {
 
           <div className="flex items-center gap-2 sm:gap-4 text-sm shrink-0">
             <NotificationsBell />
-            <div className="text-right leading-tight hidden sm:block">
-              <div className="font-medium text-slate-900">{user?.firstName} {user?.lastName}</div>
-              <div className="text-xs text-slate-500 capitalize">{user?.role?.replaceAll('_', ' ')}</div>
-            </div>
-            <button
-              onClick={logout}
-              className="text-slate-500 hover:text-slate-800 text-sm font-medium"
-            >
-              Sign out
-            </button>
+            <UserMenu />
           </div>
         </header>
 
