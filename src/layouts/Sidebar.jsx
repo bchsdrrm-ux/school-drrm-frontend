@@ -14,6 +14,7 @@ const NAV_SECTIONS = [
     items: [
       { to: '/hazards', label: 'Hazard Inventory', icon: 'hazard' },
       { to: '/hazard-map', label: 'Hazard Map', icon: 'map' },
+      { to: '/campus-map', label: 'Campus Map', icon: 'pin' },
     ],
   },
   {

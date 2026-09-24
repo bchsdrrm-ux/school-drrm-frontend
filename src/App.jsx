@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import RequireAuth from './auth/RequireAuth';
 import LoginPage from './auth/LoginPage';
 import AppShell from './layouts/AppShell';
 import PlaceholderPage from './components/PlaceholderPage';
 import PublicInfoPage from './features/publicInfo/PublicInfoPage';
+
+// Loaded on demand: pulls in the map library, which most visits never need.
+const CampusMapPage = lazy(() => import('./features/campusMap/CampusMapPage'));
 
 import DashboardPage from './features/dashboard/DashboardPage';
 import HazardsPage from './features/hazards/HazardsPage';
@@ -50,6 +53,14 @@ export default function App() {
         <Route path="/documents" element={<DocumentsPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/hazard-map" element={<HazardMapPage />} />
+        <Route
+          path="/campus-map"
+          element={(
+            <Suspense fallback={<div className="text-sm text-slate-500">Loading map…</div>}>
+              <CampusMapPage />
+            </Suspense>
+          )}
+        />
         <Route path="/drrm-teams" element={<DrrmTeamsPage />} />
         <Route path="/drills" element={<DrillsPage />} />
         <Route path="/inspections" element={<InspectionsPage />} />
