@@ -5,6 +5,9 @@ import App from './App';
 import { AuthProvider } from './auth/AuthContext';
 import { FeedbackProvider } from './components/Toast';
 import ServerWakingBanner from './components/ServerWakingBanner';
+import OfflineBanner from './components/OfflineBanner';
+import PwaUpdatePrompt from './components/PwaUpdatePrompt';
+import './lib/install';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -12,7 +15,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <AuthProvider>
         <FeedbackProvider>
+          <OfflineBanner />
           <ServerWakingBanner />
+          <PwaUpdatePrompt />
           <App />
         </FeedbackProvider>
       </AuthProvider>

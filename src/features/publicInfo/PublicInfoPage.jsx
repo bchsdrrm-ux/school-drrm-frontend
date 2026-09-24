@@ -3,29 +3,48 @@ import { Link } from 'react-router-dom';
 import { api } from '../../lib/apiClient';
 import Logo from '../../components/Logo';
 import Icon from '../../components/icons';
+import { useInstallPrompt } from '../../lib/install';
 import { GUIDES, NATIONAL_HOTLINES, PARENT_GUIDE } from './guides';
 
 const REFRESH_MS = 30000;
 
 const telHref = (n) => `tel:${String(n).replace(/[^\d+]/g, '')}`;
 
+// Live data is at most ~45s old (server cache 15s + our 30s poll). Anything older
+// than this came from the offline cache and must not be presented as the current status.
+const STALE_AFTER_MS = 2 * 60 * 1000;
+
 function useLiveInfo() {
-  const [state, setState] = useState({ status: 'loading', data: null, updatedAt: null });
+  const [state, setState] = useState({ status: 'loading', data: null, updatedAt: null, failed: false });
+  const [online, setOnline] = useState(typeof navigator === 'undefined' ? true : navigator.onLine);
+  const [, tick] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
     const load = () => {
       api.get('/public/info')
-        .then((data) => { if (!cancelled) setState({ status: 'ready', data, updatedAt: new Date() }); })
-        // Keep the last good data if a refresh fails; only report "unavailable" when we have nothing.
-        .catch(() => { if (!cancelled) setState((s) => (s.data ? s : { status: 'error', data: null, updatedAt: null })); });
+        .then((data) => { if (!cancelled) setState({ status: 'ready', data, updatedAt: new Date(), failed: false }); })
+        // Keep the last data if a refresh fails, but remember that it failed so we don't call it live.
+        .catch(() => { if (!cancelled) setState((s) => (s.data ? { ...s, failed: true } : { status: 'error', data: null, updatedAt: null, failed: true })); });
     };
+    const goOnline = () => { setOnline(true); load(); };
+    const goOffline = () => setOnline(false);
     load();
-    const id = setInterval(load, REFRESH_MS);
-    return () => { cancelled = true; clearInterval(id); };
+    const poll = setInterval(load, REFRESH_MS);
+    const clock = setInterval(() => tick((n) => n + 1), 15000); // re-evaluate staleness even when nothing else changes
+    window.addEventListener('online', goOnline);
+    window.addEventListener('offline', goOffline);
+    return () => {
+      cancelled = true;
+      clearInterval(poll);
+      clearInterval(clock);
+      window.removeEventListener('online', goOnline);
+      window.removeEventListener('offline', goOffline);
+    };
   }, []);
 
-  return state;
+  const stale = state.status === 'ready' && (!online || state.failed || Date.now() - new Date(state.data.generatedAt).getTime() > STALE_AFTER_MS);
+  return { ...state, online, stale };
 }
 
 // Open every guide when printing so the printout is a complete poster.
@@ -41,7 +60,13 @@ function usePrintOpensAll() {
   return printing;
 }
 
-function StatusBanner({ status, data, updatedAt }) {
+function formatSaved(iso) {
+  const d = new Date(iso);
+  const time = d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+  return d.toDateString() === new Date().toDateString() ? time : `${d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}, ${time}`;
+}
+
+function StatusBanner({ status, data, updatedAt, stale }) {
   if (status === 'loading') {
     return (
       <div role="status" className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700">
@@ -61,7 +86,36 @@ function StatusBanner({ status, data, updatedAt }) {
       </div>
     );
   }
-  if (data.emergency?.active) {
+
+  const active = data.emergency?.active;
+  const saved = formatSaved(data.generatedAt);
+
+  // A saved copy (offline or a failing connection) is never shown as the current status.
+  if (stale && active) {
+    return (
+      <div role="alert" className="flex items-start gap-3 rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-red-900">
+        <Icon name="siren" className="mt-0.5 h-6 w-6 shrink-0 text-red-600" />
+        <div className="text-sm">
+          <div className="text-base font-semibold">An emergency was in progress: {data.emergency.alertType}</div>
+          <div className="text-red-800">
+            This is a saved copy from {saved} and may be out of date. Follow your teachers' instructions and call 911 if you are in danger.
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (stale) {
+    return (
+      <div role="status" className="flex items-start gap-3 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-amber-900">
+        <Icon name="hazard" className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+        <div className="text-sm">
+          <div className="font-semibold">Showing information saved at {saved}</div>
+          <div className="text-amber-800">You appear to be offline, so the current status can't be confirmed. This does not mean there is no emergency. If you are in danger, call 911. The guides below work offline.</div>
+        </div>
+      </div>
+    );
+  }
+  if (active) {
     return (
       <div role="alert" className="flex items-start gap-3 rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-red-900">
         <Icon name="siren" className="mt-0.5 h-6 w-6 shrink-0 text-red-600" />
@@ -136,6 +190,7 @@ function Guide({ guide, open }) {
 export default function PublicInfoPage() {
   const live = useLiveInfo();
   const printing = usePrintOpensAll();
+  const { canInstall, showIosHint, install } = useInstallPrompt();
   const { status, data } = live;
 
   useEffect(() => { document.title = 'Emergency information | BCHS DRRM'; }, []);
@@ -155,6 +210,11 @@ export default function PublicInfoPage() {
             </div>
           </div>
           <div className="flex items-center gap-2 print:hidden">
+            {canInstall && (
+              <button onClick={install} className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                Install app
+              </button>
+            )}
             <button onClick={() => window.print()} className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">
               Print
             </button>
@@ -253,6 +313,12 @@ export default function PublicInfoPage() {
             {PARENT_GUIDE.steps.map((s) => <li key={s}>{s}</li>)}
           </ul>
         </Card>
+
+        {showIosHint && (
+          <p className="rounded-lg bg-slate-100 px-3 py-2 text-xs text-slate-600 print:hidden">
+            Keep this page on your phone: tap the Share button in Safari, then "Add to Home Screen". It will open even without a signal.
+          </p>
+        )}
 
         <footer className="pb-6 text-xs text-slate-500">
           General guidance only. Your school's own DRRM plan and the instructions given by teachers and the DRRM team come first.

@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../auth/AuthContext';
 import ChangePasswordModal from '../auth/ChangePasswordModal';
+import { useInstallPrompt } from '../lib/install';
 
 export default function UserMenu() {
   const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const ref = useRef(null);
+  const { canInstall, install } = useInstallPrompt();
 
   useEffect(() => {
     if (!open) return undefined;
@@ -55,6 +57,15 @@ export default function UserMenu() {
           >
             Change password
           </button>
+          {canInstall && (
+            <button
+              role="menuitem"
+              onClick={() => { setOpen(false); install(); }}
+              className="block w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50"
+            >
+              Install app
+            </button>
+          )}
           <button
             role="menuitem"
             onClick={logout}
