@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLiveInfo } from '../../lib/useLiveInfo';
 import BrandBackdrop from '../../components/BrandBackdrop';
+import PartnerLogos, { GovBar } from '../../components/PartnerLogos';
 import Logo from '../../components/Logo';
 import Icon from '../../components/icons';
 import AlertsCard from '../../components/AlertsCard';
@@ -165,8 +166,9 @@ export default function PublicInfoPage() {
 
   return (
     <div className="min-h-dvh bg-slate-50">
-      <div className="relative overflow-hidden bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700 pt-[env(safe-area-inset-top)] text-white print:bg-none print:text-slate-900">
+      <div className="relative overflow-hidden bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700 text-white print:bg-none print:text-slate-900">
         <BrandBackdrop className="print:hidden" />
+        <GovBar />
         <header className="relative mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-4 sm:px-6">
           <Link to="/" className="flex items-center gap-3 rounded-lg" aria-label="BCHS DRRM home">
             <Logo size={38} />
@@ -271,8 +273,9 @@ export default function PublicInfoPage() {
           </p>
         )}
 
-        <footer className="pb-[max(1.5rem,env(safe-area-inset-bottom))] text-xs text-slate-500">
-          General guidance only. Your school's own DRRM plan and the instructions given by teachers and the DRRM team come first.
+        <footer className="flex flex-col gap-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+          <p className="max-w-xl">General guidance only. Your school's own DRRM plan and the instructions given by teachers and the DRRM team come first.</p>
+          <PartnerLogos compact className="self-start print:hidden" />
         </footer>
       </main>
     </div>

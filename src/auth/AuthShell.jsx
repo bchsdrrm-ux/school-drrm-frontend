@@ -4,6 +4,8 @@ import Logo from '../components/Logo';
 import Icon from '../components/icons';
 import ThemeToggle from '../components/ThemeToggle';
 import BrandBackdrop from '../components/BrandBackdrop';
+import PartnerLogos from '../components/PartnerLogos';
+import { SCHOOL } from '../lib/school';
 
 // The four thematic areas of Philippine DRRM, which the system is organised around.
 const AREAS = [
@@ -38,7 +40,7 @@ export default function AuthShell({ title, subtitle, children }) {
 
         <div className="relative">
           <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-blue-50">
-            <Icon name="shield" className="h-3.5 w-3.5" /> Disaster Risk Reduction and Management
+            <Icon name="shield" className="h-3.5 w-3.5" /> {SCHOOL.name} · DRRM
           </p>
           <h2 className="max-w-lg text-4xl font-semibold leading-tight">Prepared schools are safer schools.</h2>
           <p className="mt-4 max-w-md text-blue-100">
@@ -55,9 +57,12 @@ export default function AuthShell({ title, subtitle, children }) {
           </ul>
         </div>
 
-        <p className="relative flex items-center gap-2 text-xs text-blue-100">
-          <Icon name="lock" className="h-3.5 w-3.5" /> Authorized school personnel only
-        </p>
+        <div className="relative space-y-4">
+          <PartnerLogos />
+          <p className="flex items-center gap-2 text-xs text-blue-100">
+            <Icon name="lock" className="h-3.5 w-3.5" /> Authorized school personnel only
+          </p>
+        </div>
       </aside>
 
       <main className="relative flex min-h-dvh flex-1 flex-col bg-slate-50 lg:min-h-0">
@@ -86,6 +91,7 @@ export default function AuthShell({ title, subtitle, children }) {
             <p className="flex items-center gap-1.5 text-xs text-slate-500">
               <Icon name="lock" className="h-3.5 w-3.5" /> Secure sign-in for authorized school personnel
             </p>
+            <PartnerLogos compact className="mt-2 lg:hidden" />
             <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
               <Link to="/" className="inline-flex items-center gap-1.5 font-medium text-brand-700 hover:underline"><Icon name="back" className="h-4 w-4" /> Back to home</Link>
               <Link to="/info" className="inline-flex items-center gap-1.5 font-medium text-brand-700 hover:underline"><Icon name="siren" className="h-4 w-4" /> Emergency information</Link>

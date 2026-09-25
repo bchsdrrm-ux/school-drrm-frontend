@@ -8,9 +8,10 @@ import { locationLabel } from '../../lib/useLocations';
 import { useFeedback } from '../../components/Toast';
 import StatusBadge from '../../components/StatusBadge';
 import Button from '../../components/Button';
+import { SCHOOL, SCHOOL_POINT, addSchoolPin } from '../../lib/school';
 
-// Shown until at least one location has been placed (roughly the whole Philippines).
-const DEFAULT_VIEW = { center: [12.88, 121.77], zoom: 5 };
+// The map opens on the school until locations are placed; the school pin always stays on it.
+const DEFAULT_VIEW = { center: SCHOOL_POINT, zoom: SCHOOL.zoom };
 
 const LAYERS = [
   { key: 'hazards', label: 'Hazards' },
@@ -148,6 +149,7 @@ export default function CampusMapPage() {
     });
     street.addTo(map);
     L.control.layers({ Street: street, Satellite: satellite }, {}, { position: 'topright' }).addTo(map);
+    addSchoolPin(L.layerGroup().addTo(map));
     markerLayerRef.current = L.layerGroup().addTo(map);
     mapRef.current = map;
 
@@ -180,7 +182,7 @@ export default function CampusMapPage() {
       marker.addTo(layer);
     });
     if (!fittedRef.current && pinned.length) {
-      const bounds = L.latLngBounds(pinned.map((g) => [g.location.latitude, g.location.longitude]));
+      const bounds = L.latLngBounds([SCHOOL_POINT, ...pinned.map((g) => [g.location.latitude, g.location.longitude])]);
       map.fitBounds(bounds, { padding: [60, 60], maxZoom: 18 });
       fittedRef.current = true;
     }
@@ -291,7 +293,7 @@ export default function CampusMapPage() {
               </div>
             )}
             {data && !data.needsSetup && placedCount === 0 && !placing && (
-              <div className="pointer-events-none absolute inset-0 z-[400] flex items-center justify-center p-6">
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[400] flex items-end justify-center p-4 sm:p-6">
                 <div className="max-w-sm rounded-xl bg-surface/95 p-5 text-center text-sm text-slate-700 shadow-lg">
                   <div className="mb-1 font-semibold text-slate-900">No locations are on the map yet</div>
                   {canManage
@@ -310,6 +312,7 @@ export default function CampusMapPage() {
               </li>
             ))}
             <li className="flex items-center gap-1.5"><span className="rounded-full bg-surface px-1 text-[9px] font-bold text-slate-700 ring-1 ring-slate-400">A</span> Has an evacuation area</li>
+            <li className="flex items-center gap-1.5"><span className="inline-block h-3 w-3 rounded-full bg-[#1e3a8a] ring-2 ring-white dark:ring-slate-500" aria-hidden="true" /> {SCHOOL.name}</li>
           </ul>
         </div>
 

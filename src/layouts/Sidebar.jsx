@@ -158,6 +158,15 @@ export default function Sidebar({ isOpen, onClose }) {
         </nav>
 
         <div className="hidden md:block sticky bottom-0 bg-surface border-t border-slate-200 p-2">
+          {!collapsed && (
+            <div className="mb-2 flex items-center gap-2.5 rounded-md bg-slate-50 px-3 py-2">
+              <img src="/brand/deped-seal.png" alt="" width="28" height="28" className="h-7 w-7 shrink-0" />
+              <div className="min-w-0 text-[11px] leading-tight text-slate-500">
+                <div className="font-semibold text-slate-700">Department of Education</div>
+                <div className="truncate">Baguio City National High School</div>
+              </div>
+            </div>
+          )}
           <button
             onClick={toggleCollapsed}
             className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-slate-500 hover:bg-slate-50 hover:text-slate-800 ${collapsed ? 'justify-center' : ''}`}

@@ -76,7 +76,7 @@ export default function AssemblyAreas({ status, areas, online }) {
         <p className="text-sm text-slate-500">The school has not published its assembly areas yet. Ask your teacher where your class assembles.</p>
       )}
 
-      {mapped.length > 0 && online && (
+      {status === 'ready' && online && (
         <div className="mb-3 print:hidden">
           <div className="relative isolate overflow-hidden rounded-lg border border-slate-200 bg-slate-100">
             <Suspense fallback={<div className="flex h-64 items-center justify-center text-sm text-slate-500 sm:h-72">Loading map…</div>}>

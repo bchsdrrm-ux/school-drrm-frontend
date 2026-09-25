@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { SCHOOL, SCHOOL_POINT, addSchoolPin } from '../../lib/school';
 
 const TEAL = '#0d9488';
 
@@ -15,7 +16,7 @@ export default function AssemblyMap({ areas, me, activeNumber, onSelect }) {
   onSelectRef.current = onSelect;
 
   useEffect(() => {
-    const map = L.map(elRef.current, { zoomControl: true, scrollWheelZoom: false });
+    const map = L.map(elRef.current, { zoomControl: true, scrollWheelZoom: false }).setView(SCHOOL_POINT, SCHOOL.zoom);
     const street = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       className: 'map-street-tiles', // dimmed in dark mode (see index.css)
@@ -27,6 +28,7 @@ export default function AssemblyMap({ areas, me, activeNumber, onSelect }) {
     });
     street.addTo(map);
     L.control.layers({ Street: street, Satellite: satellite }, {}, { position: 'topright' }).addTo(map);
+    addSchoolPin(L.layerGroup().addTo(map));
     areaLayerRef.current = L.layerGroup().addTo(map);
     meLayerRef.current = L.layerGroup().addTo(map);
     mapRef.current = map;
@@ -52,7 +54,7 @@ export default function AssemblyMap({ areas, me, activeNumber, onSelect }) {
         .addTo(layer);
     });
     if (!fittedRef.current && areas.length) {
-      map.fitBounds(L.latLngBounds(areas.map((a) => [a.latitude, a.longitude])), { padding: [40, 40], maxZoom: 18 });
+      map.fitBounds(L.latLngBounds([SCHOOL_POINT, ...areas.map((a) => [a.latitude, a.longitude])]), { padding: [40, 40], maxZoom: 18 });
       fittedRef.current = true;
     }
   }, [areas, activeNumber]);
@@ -67,9 +69,9 @@ export default function AssemblyMap({ areas, me, activeNumber, onSelect }) {
     L.circleMarker([me.latitude, me.longitude], { radius: 8, color: '#ffffff', weight: 3, fillColor: '#2563eb', fillOpacity: 1 })
       .bindTooltip('You are here')
       .addTo(layer);
-    const points = [[me.latitude, me.longitude], ...areas.map((a) => [a.latitude, a.longitude])];
+    const points = [[me.latitude, me.longitude], SCHOOL_POINT, ...areas.map((a) => [a.latitude, a.longitude])];
     map.fitBounds(L.latLngBounds(points), { padding: [40, 40], maxZoom: 18 });
   }, [me, areas]);
 
-  return <div ref={elRef} className="h-64 w-full sm:h-72" role="application" aria-label="Map of assembly areas" />;
+  return <div ref={elRef} className="h-64 w-full sm:h-72" role="application" aria-label={`Map of ${SCHOOL.name} and its assembly areas`} />;
 }

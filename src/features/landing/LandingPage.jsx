@@ -4,6 +4,8 @@ import Logo from '../../components/Logo';
 import Icon from '../../components/icons';
 import ThemeToggle from '../../components/ThemeToggle';
 import BrandBackdrop from '../../components/BrandBackdrop';
+import PartnerLogos, { GovBar } from '../../components/PartnerLogos';
+import { SCHOOL } from '../../lib/school';
 import { useLiveInfo } from '../../lib/useLiveInfo';
 import { useInstallPrompt } from '../../lib/install';
 import { NATIONAL_HOTLINES } from '../publicInfo/guides';
@@ -81,8 +83,9 @@ export default function LandingPage() {
   return (
     <div className="min-h-dvh bg-slate-50">
       {/* Hero */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700 pt-[env(safe-area-inset-top)] text-white">
+      <div className="relative overflow-hidden bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700 text-white">
         <BrandBackdrop />
+        <GovBar />
         <header className="relative mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-4 sm:px-6">
           <Link to="/" className="flex items-center gap-3 rounded-lg" aria-label="BCHS DRRM home">
             <Logo size={40} />
@@ -103,6 +106,7 @@ export default function LandingPage() {
 
         <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 pb-20 pt-10 sm:px-6 sm:pb-24 sm:pt-14 lg:grid-cols-[1.25fr_1fr] lg:gap-14 lg:pb-28">
           <div>
+            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-blue-100">{SCHOOL.name}</p>
             <StatusChip {...live} />
             <h1 className="mt-6 text-4xl font-semibold leading-[1.1] tracking-tight sm:text-5xl">Prepared schools are safer schools.</h1>
             <p className="mt-5 max-w-xl text-base text-blue-100 sm:text-lg">
@@ -208,19 +212,24 @@ export default function LandingPage() {
       </main>
 
       <footer className="border-t border-slate-200 bg-surface pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-8 text-sm text-slate-600 sm:px-6 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-3">
-            <Logo size={32} />
-            <div className="leading-tight">
-              <div className="font-semibold text-slate-900">BCHS DRRM</div>
-              <div className="text-xs text-slate-500">General guidance only. The school's DRRM plan and your teachers' instructions come first.</div>
+        <div className="mx-auto max-w-6xl space-y-6 px-4 py-8 text-sm text-slate-600 sm:px-6">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-3">
+              <Logo size={32} />
+              <div className="leading-tight">
+                <div className="font-semibold text-slate-900">BCHS DRRM</div>
+                <div className="text-xs text-slate-500">{SCHOOL.name}. General guidance only: the school's DRRM plan and your teachers' instructions come first.</div>
+              </div>
             </div>
+            <nav aria-label="Footer" className="flex flex-wrap items-center gap-x-5 gap-y-2 font-medium">
+              <Link to="/info" className="text-brand-700 hover:underline">Emergency information</Link>
+              <Link to="/login" className="text-brand-700 hover:underline">Staff sign in</Link>
+              <a href="tel:911" className="text-brand-700 hover:underline">Emergency: 911</a>
+            </nav>
           </div>
-          <nav aria-label="Footer" className="flex flex-wrap items-center gap-x-5 gap-y-2 font-medium">
-            <Link to="/info" className="text-brand-700 hover:underline">Emergency information</Link>
-            <Link to="/login" className="text-brand-700 hover:underline">Staff sign in</Link>
-            <a href="tel:911" className="text-brand-700 hover:underline">Emergency: 911</a>
-          </nav>
+          <div className="border-t border-slate-100 pt-6">
+            <PartnerLogos />
+          </div>
         </div>
       </footer>
     </div>
