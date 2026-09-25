@@ -91,6 +91,16 @@
   }
 }
 
+@layer components {
+  /* Primary call-to-action used on the signed-out screens. */
+  .btn-brand {
+    @apply inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-brand-900/20 transition-colors hover:bg-brand-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:opacity-60;
+  }
+  .auth-input {
+    @apply w-full rounded-lg border border-slate-300 py-2.5 pl-10 pr-3 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/30;
+  }
+}
+
 /* Brand blue and error text need to be lighter on dark surfaces to stay readable. */
 .dark .text-risk-critical { color: #f87171; }
 .dark .text-brand-600 { color: #60a5fa; }

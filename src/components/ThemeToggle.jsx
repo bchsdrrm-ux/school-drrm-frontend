@@ -31,7 +31,7 @@ export default function ThemeToggle({ className = '', fullWidth = false }) {
             onClick={() => setPreference(o.value)}
             title={o.label}
             className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${fullWidth ? 'flex-1 justify-center' : ''} ${
-              selected ? 'bg-surface text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-800'
+              selected ? 'bg-surface text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <Glyph>{o.icon}</Glyph>

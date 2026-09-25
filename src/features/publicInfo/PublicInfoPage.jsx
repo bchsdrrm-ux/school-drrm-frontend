@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { api } from '../../lib/apiClient';
+import { useLiveInfo } from '../../lib/useLiveInfo';
+import BrandBackdrop from '../../components/BrandBackdrop';
 import Logo from '../../components/Logo';
 import Icon from '../../components/icons';
 import AlertsCard from '../../components/AlertsCard';
@@ -9,46 +10,7 @@ import AssemblyAreas from './AssemblyAreas';
 import { useInstallPrompt } from '../../lib/install';
 import { GUIDES, NATIONAL_HOTLINES, PARENT_GUIDE } from './guides';
 
-const REFRESH_MS = 30000;
-
 const telHref = (n) => `tel:${String(n).replace(/[^\d+]/g, '')}`;
-
-// Live data is at most ~45s old (server cache 15s + our 30s poll). Anything older
-// than this came from the offline cache and must not be presented as the current status.
-const STALE_AFTER_MS = 2 * 60 * 1000;
-
-function useLiveInfo() {
-  const [state, setState] = useState({ status: 'loading', data: null, updatedAt: null, failed: false });
-  const [online, setOnline] = useState(typeof navigator === 'undefined' ? true : navigator.onLine);
-  const [, tick] = useState(0);
-
-  useEffect(() => {
-    let cancelled = false;
-    const load = () => {
-      api.get('/public/info')
-        .then((data) => { if (!cancelled) setState({ status: 'ready', data, updatedAt: new Date(), failed: false }); })
-        // Keep the last data if a refresh fails, but remember that it failed so we don't call it live.
-        .catch(() => { if (!cancelled) setState((s) => (s.data ? { ...s, failed: true } : { status: 'error', data: null, updatedAt: null, failed: true })); });
-    };
-    const goOnline = () => { setOnline(true); load(); };
-    const goOffline = () => setOnline(false);
-    load();
-    const poll = setInterval(load, REFRESH_MS);
-    const clock = setInterval(() => tick((n) => n + 1), 15000); // re-evaluate staleness even when nothing else changes
-    window.addEventListener('online', goOnline);
-    window.addEventListener('offline', goOffline);
-    return () => {
-      cancelled = true;
-      clearInterval(poll);
-      clearInterval(clock);
-      window.removeEventListener('online', goOnline);
-      window.removeEventListener('offline', goOffline);
-    };
-  }, []);
-
-  const stale = state.status === 'ready' && (!online || state.failed || Date.now() - new Date(state.data.generatedAt).getTime() > STALE_AFTER_MS);
-  return { ...state, online, stale };
-}
 
 // Open every guide when printing so the printout is a complete poster.
 function usePrintOpensAll() {
@@ -203,38 +165,42 @@ export default function PublicInfoPage() {
 
   return (
     <div className="min-h-dvh bg-slate-50">
-      <header className="border-b border-slate-200 bg-surface pt-[env(safe-area-inset-top)] print:border-0">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-3 sm:px-6">
-          <div className="flex items-center gap-3">
-            <Logo size={36} />
+      <div className="relative overflow-hidden bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700 pt-[env(safe-area-inset-top)] text-white print:bg-none print:text-slate-900">
+        <BrandBackdrop className="print:hidden" />
+        <header className="relative mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-4 sm:px-6">
+          <Link to="/" className="flex items-center gap-3 rounded-lg" aria-label="BCHS DRRM home">
+            <Logo size={38} />
             <div className="whitespace-nowrap leading-tight">
-              <div className="text-sm font-semibold text-slate-900">BCHS DRRM</div>
-              <div className="text-xs text-slate-500">Emergency information</div>
+              <div className="text-sm font-semibold">BCHS DRRM</div>
+              <div className="text-xs text-blue-100 print:text-slate-600">Emergency information</div>
             </div>
-          </div>
+          </Link>
           <div className="flex items-center gap-2 print:hidden">
             <ThemeToggle />
             {canInstall && (
-              <button onClick={install} className="rounded-lg border border-slate-300 bg-surface px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">
+              <button onClick={install} className="rounded-lg border border-white/30 bg-white/10 px-3 py-1.5 text-sm font-medium text-white hover:bg-white/20">
                 Install app
               </button>
             )}
-            <button onClick={() => window.print()} className="hidden rounded-lg border sm:inline-flex border-slate-300 bg-surface px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50">
+            <button onClick={() => window.print()} className="hidden rounded-lg border border-white/30 bg-white/10 px-3 py-1.5 text-sm font-medium text-white hover:bg-white/20 sm:inline-flex">
               Print
             </button>
-            <Link to="/login" className="whitespace-nowrap rounded-lg bg-brand-700 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-800"><span className="sm:hidden">Sign in</span><span className="hidden sm:inline">Staff sign in</span></Link>
+            <Link to="/login" className="whitespace-nowrap rounded-lg bg-white px-3 py-1.5 text-sm font-semibold text-[#1e40af] shadow-sm hover:bg-white/90"><span className="sm:hidden">Sign in</span><span className="hidden sm:inline">Staff sign in</span></Link>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <main className="mx-auto max-w-5xl space-y-5 px-4 py-6 sm:px-6">
-        <div>
-          <h1 className="text-2xl font-semibold text-slate-900">Know what to do before it happens</h1>
-          <p className="mt-1 max-w-2xl text-sm text-slate-600">
-            Emergency numbers, assembly areas and simple step-by-step guides for learners, staff, parents and guardians. Always follow the instructions of your teachers and the school's DRRM team.
+        <div className="relative mx-auto max-w-5xl px-4 pb-10 pt-6 sm:px-6 sm:pb-12 sm:pt-8">
+          <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-blue-50 print:hidden">
+            <Icon name="shield" className="h-3.5 w-3.5" /> For learners, staff, parents and guardians
+          </p>
+          <h1 className="max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl">Know what to do before it happens</h1>
+          <p className="mt-3 max-w-2xl text-sm text-blue-100 sm:text-base print:text-slate-700">
+            Emergency numbers, assembly areas and simple step-by-step guides. Always follow the instructions of your teachers and the school's DRRM team.
           </p>
         </div>
+      </div>
 
+      <main className="mx-auto max-w-5xl space-y-5 px-4 py-6 sm:px-6">
         <StatusBanner {...live} />
 
         <AlertsCard />

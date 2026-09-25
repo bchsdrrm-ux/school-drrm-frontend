@@ -7,6 +7,7 @@ import ResetPasswordPage from './auth/ResetPasswordPage';
 import AppShell from './layouts/AppShell';
 import PlaceholderPage from './components/PlaceholderPage';
 import PublicInfoPage from './features/publicInfo/PublicInfoPage';
+import LandingPage from './features/landing/LandingPage';
 
 // Loaded on demand: pulls in the map library, which most visits never need.
 const CampusMapPage = lazy(() => import('./features/campusMap/CampusMapPage'));
@@ -41,7 +42,7 @@ export default function App() {
 
       <Route
         element={
-          <RequireAuth>
+          <RequireAuth publicHome={<LandingPage />}>
             <AppShell />
           </RequireAuth>
         }
