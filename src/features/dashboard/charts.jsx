@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // Neutral chrome shared by the charts (slate, matching the rest of the app).
 const GRID = 'var(--chart-grid)';
@@ -216,8 +216,20 @@ function monthDate(ym) {
 
 export function IncidentTrendChart({ trend }) {
   const { containerRef, show, hide, tooltip } = useChartTooltip();
-  const W = 480;
-  const H = 230;
+
+  // Draw at the card's real pixel width so text stays 10-12px on every screen, instead of
+  // scaling a fixed drawing (which made the labels huge on wide monitors).
+  const [box, setBox] = useState(null);
+  const [W, setW] = useState(480);
+  useEffect(() => {
+    if (!box) return undefined;
+    const measure = () => setW(Math.max(200, Math.round(box.clientWidth)));
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(box);
+    return () => ro.disconnect();
+  }, [box]);
+  const H = W < 420 ? 210 : 230;
   const pad = { top: 22, right: 8, bottom: 26, left: 30 };
   const plotW = W - pad.left - pad.right;
   const plotH = H - pad.top - pad.bottom;
@@ -246,8 +258,8 @@ export function IncidentTrendChart({ trend }) {
   );
 
   const chart = (
-    <div ref={containerRef} className="relative">
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={`Incidents per month, last ${trend.length} months: ${trend.map((t) => `${label(t)} ${t.count}`).join(', ')}`}>
+    <div ref={(el) => { containerRef.current = el; setBox(el); }} className="relative">
+      <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} className="block max-w-full" role="img" aria-label={`Incidents per month, last ${trend.length} months: ${trend.map((t) => `${label(t)} ${t.count}`).join(', ')}`}>
         {ticks.map((v) => (
           <g key={v}>
             <line x1={pad.left} x2={W - pad.right} y1={y(v)} y2={y(v)} style={{ stroke: v === 0 ? BASELINE : GRID }} strokeWidth="1" />

@@ -71,7 +71,7 @@ export default function AppShell() {
           </div>
         </header>
 
-        <main className="p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:p-6">
+        <main className="p-3 pb-[max(4rem,env(safe-area-inset-bottom))] sm:p-6 sm:pb-16">
           <Outlet />
         </main>
       </div>

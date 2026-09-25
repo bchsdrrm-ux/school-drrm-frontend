@@ -96,7 +96,7 @@ function StatusBanner({ emergency, attention }) {
         <Icon name="hazard" className="h-6 w-6 shrink-0 text-amber-600" />
         <div className="min-w-0">
           <div className="text-sm font-semibold">No active emergency. Some items need attention.</div>
-          <div className="text-xs text-amber-800">{attention.slice(0, 3).map((a) => `${fmt(a.count)} ${a.label.toLowerCase()}`).join(' · ')}</div>
+          <div className="text-xs text-amber-800">{attention.slice(0, 3).map((a) => `${fmt(a.count)} ${a.text.toLowerCase()}`).join(' · ')}</div>
         </div>
       </div>
     );
@@ -180,14 +180,14 @@ export default function DashboardPage() {
     .join(' · ');
 
   const attention = [
-    { count: critical, label: 'Critical hazards', to: '/hazards' },
-    { count: overdue, label: 'Overdue hazard actions', to: '/hazards' },
-    { count: activeIncidents, label: 'Active incidents', to: '/incidents' },
-    { count: docExpired, label: 'Expired documents', to: '/documents' },
-    { count: docExpiring, label: 'Documents expiring within 30 days', to: '/documents' },
-    { count: equipmentTotal, label: 'Equipment alerts', to: '/equipment' },
-    { count: docMissing, label: 'Documents without a file', to: '/documents' },
-  ].filter((a) => a.count > 0);
+    { count: critical, label: 'Critical hazards', one: 'Critical hazard', to: '/hazards' },
+    { count: overdue, label: 'Overdue hazard actions', one: 'Overdue hazard action', to: '/hazards' },
+    { count: activeIncidents, label: 'Active incidents', one: 'Active incident', to: '/incidents' },
+    { count: docExpired, label: 'Expired documents', one: 'Expired document', to: '/documents' },
+    { count: docExpiring, label: 'Documents expiring within 30 days', one: 'Document expiring within 30 days', to: '/documents' },
+    { count: equipmentTotal, label: 'Equipment alerts', one: 'Equipment alert', to: '/equipment' },
+    { count: docMissing, label: 'Documents without a file', one: 'Document without a file', to: '/documents' },
+  ].filter((a) => a.count > 0).map((a) => ({ ...a, text: a.count === 1 ? a.one : a.label }));
 
   return (
     <div>
@@ -246,7 +246,7 @@ export default function DashboardPage() {
                 <li key={a.label}>
                   <Link to={a.to} className="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-slate-50">
                     <span className="flex h-7 min-w-[1.75rem] items-center justify-center rounded-full bg-slate-100 px-2 text-xs font-semibold text-slate-800">{fmt(a.count)}</span>
-                    <span className="flex-1 text-sm text-slate-700">{a.label}</span>
+                    <span className="flex-1 text-sm text-slate-700">{a.text}</span>
                     <Icon name="arrow" className="h-4 w-4 text-slate-400" />
                   </Link>
                 </li>
