@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLiveInfo } from '../../lib/useLiveInfo';
 import BrandBackdrop from '../../components/BrandBackdrop';
 import PartnerLogos, { GovBar } from '../../components/PartnerLogos';
+import { SCHOOL } from '../../lib/school';
 import Logo from '../../components/Logo';
 import Icon from '../../components/icons';
 import AlertsCard from '../../components/AlertsCard';
@@ -169,6 +170,14 @@ export default function PublicInfoPage() {
       <div className="relative overflow-hidden bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700 text-white print:bg-none print:text-slate-900">
         <BrandBackdrop className="print:hidden" />
         <GovBar />
+        <div className="hidden items-center gap-3 border-b border-slate-300 px-4 py-3 print:flex">
+          <img src="/brand/deped-seal.png" alt="" width="48" height="48" className="h-12 w-12" />
+          <div className="leading-tight text-slate-900">
+            <div className="text-xs">Republic of the Philippines</div>
+            <div className="text-sm font-bold">Department of Education</div>
+            <div className="text-xs font-semibold">{SCHOOL.name}</div>
+          </div>
+        </div>
         <header className="relative mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-4 sm:px-6">
           <Link to="/" className="flex items-center gap-3 rounded-lg" aria-label="BCHS DRRM home">
             <Logo size={38} />
@@ -275,7 +284,7 @@ export default function PublicInfoPage() {
 
         <footer className="flex flex-col gap-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
           <p className="max-w-xl">General guidance only. Your school's own DRRM plan and the instructions given by teachers and the DRRM team come first.</p>
-          <PartnerLogos compact className="self-start print:hidden" />
+          <PartnerLogos compact className="self-start" />
         </footer>
       </main>
     </div>
