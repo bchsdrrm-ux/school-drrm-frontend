@@ -2,6 +2,8 @@ import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import RequireAuth from './auth/RequireAuth';
 import LoginPage from './auth/LoginPage';
+import ForgotPasswordPage from './auth/ForgotPasswordPage';
+import ResetPasswordPage from './auth/ResetPasswordPage';
 import AppShell from './layouts/AppShell';
 import PlaceholderPage from './components/PlaceholderPage';
 import PublicInfoPage from './features/publicInfo/PublicInfoPage';
@@ -33,6 +35,8 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/info" element={<PublicInfoPage />} />
 
       <Route
