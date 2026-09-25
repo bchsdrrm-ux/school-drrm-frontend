@@ -47,15 +47,15 @@ export default function UserMenu() {
       </button>
 
       {open && (
-        <div role="menu" className="absolute right-0 mt-2 w-60 rounded-xl border border-slate-200 bg-surface py-1 shadow-lg z-30">
+        <div role="menu" className="absolute right-0 mt-2 w-64 max-w-[calc(100vw-1.5rem)] rounded-xl border border-slate-200 bg-surface py-1 shadow-lg z-30">
           <div className="px-4 py-3 border-b border-slate-100">
             <div className="text-sm font-medium text-slate-900">{user?.firstName} {user?.lastName}</div>
             <div className="text-xs text-slate-500 truncate">{user?.email}</div>
             <div className="text-xs text-slate-500 capitalize">{role}</div>
           </div>
-          <div className="flex items-center justify-between gap-2 px-4 py-2">
-            <span className="text-sm text-slate-700">Theme</span>
-            <ThemeToggle />
+          <div className="px-4 py-2">
+            <div className="mb-1.5 text-xs font-medium text-slate-500">Theme</div>
+            <ThemeToggle fullWidth />
           </div>
           <button
             role="menuitem"

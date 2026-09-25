@@ -16,10 +16,10 @@ function Glyph({ children }) {
 }
 
 // Segmented System / Light / Dark control.
-export default function ThemeToggle({ className = '' }) {
+export default function ThemeToggle({ className = '', fullWidth = false }) {
   const { preference, setPreference } = useTheme();
   return (
-    <div role="radiogroup" aria-label="Color theme" className={`inline-flex rounded-lg border border-slate-200 bg-slate-100 p-0.5 ${className}`}>
+    <div role="radiogroup" aria-label="Color theme" className={`${fullWidth ? 'flex w-full' : 'inline-flex'} rounded-lg border border-slate-200 bg-slate-100 p-0.5 ${className}`}>
       {OPTIONS.map((o) => {
         const selected = preference === o.value;
         return (
@@ -30,13 +30,14 @@ export default function ThemeToggle({ className = '' }) {
             aria-checked={selected}
             onClick={() => setPreference(o.value)}
             title={o.label}
-            className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
+            className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${fullWidth ? 'flex-1 justify-center' : ''} ${
               selected ? 'bg-surface text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-800'
             }`}
           >
             <Glyph>{o.icon}</Glyph>
-            <span className="hidden sm:inline">{o.label}</span>
-            <span className="sr-only sm:hidden">{o.label}</span>
+            {/* Compact copies (login, public header) show icons only on phones; the menu has room for words. */}
+            <span className={fullWidth ? '' : 'hidden sm:inline'}>{o.label}</span>
+            {!fullWidth && <span className="sr-only sm:hidden">{o.label}</span>}
           </button>
         );
       })}
